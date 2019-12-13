@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Configuration后面的status，这个用于设置log4j2自身内部的信息输出，可以不设置。
+    当设置成trace时，可以会看到log4j2内部各种详细输出。可以设置成OFF(关闭)或Error(只输出错误信息)
+    monitorInterval表示每多少秒秒配置文件会动态加载一次。在程序运行过程中，如果修改配置文件，程序会随之改变。
+-->
+<Configuration status="ERROR" monitorInterval="30">
+
+    <properties>
+        <property name="logger.level">${sys:log.level:-info}</property>
+        <property name="log.base">${sys:log.base:-/var/log/kaguya}</property> <!-- 保存路径/项目名称 -->
+        <property name="log.moduleName">web</property>        <!-- 模块名称 -->
+        <property name="log.max.size">50MB</property>         <!-- 日志文件大小 -->
+        <property name="log.max.history">30d</property>       <!-- 配置日志的滚动时间 (天)，会自动清除30天前的日志 -->
+        <property name="log.max.number">500</property>        <!-- 日志最大序号 -->
+        <property name="pattern">                             <!-- 日志格式 -->
+            %highlight{%d{yyyy-MM-dd HH:mm:ss.SSS}} %-5level [%thread] %X{REQUEST_ID} [%X{traceId},%X{spanId},%X{parentId}] - %l - %msg%n
+        </property>
+    </properties>
+
+    <Appenders>
+        <!-- 输出控制台日志的配置 -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <!-- 控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <Filters>
+                <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="ACCEPT"/>
+            </Filters>
+
+            <!-- 输出日志的格式 -->
+            <PatternLayout>
+                    pattern="%highlight{%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%t] %X{REQUEST_ID} [%X{traceId},%X{spanId},%X{parentId}] - %l - %msg%n}{FATAL=Bright Red, ERROR=Bright Magenta, WARN=Bright Yellow, INFO=Bright Green, DEBUG=Bright Cyan, TRACE=Bright White}"
+            </PatternLayout>
+        </Console>
+
+        <!-- RollingFile: 文件滚动更新机制 -->
+        <!-- 打印出所有的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档 -->
+        <RollingFile name="FILE.INFO"
+                     fileName="${log.base}/${log.moduleName}/info.log"
+                     filePattern="${log.base}/${log.moduleName}/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log.gz"><!-- 最小时间粒度为天 -->
+            <!-- 输出日志的格式 -->
+            <PatternLayout pattern="${pattern}"/>
+
+            <Filters>
+                <!--
+                    DENY说明不由当前appender处理，ACCEPT说明由当前filter处理
+                    NEUTRAL说明如果按顺序还有其他filter则由其他filter处理，如果当前filter已经是最后一个filter，则由当前appender处理。
+                -->
+                <ThresholdFilter level="warn" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+
+            <!--
+                触发策略：CronTriggeringPolicy、OnStartupTriggeringPolicy、SizeBasedTriggeringPolicy、
+                TimeBasedTriggeringPolicy、CompositeTriggeringPolicy，将多个TriggeringPolicy放到Policies中表示使用复合策略
+            -->
+            <!-- 触发策略，每经过一天或者当文件到达sizeMB-->
+            <Policies>
+                <!--
+                    1. interval参数需要与filePattern结合使用，规定了触发rollover的频率。
+                    2. modulate参数指明是否对interval进行调节，默认为false。若modulate为true，会以0为开始对interval进行偏移计算。
+                    例如，最小时间粒度为小时，当前为3:00，interval为4，则以后触发rollover的时间依次为4:00，8:00，12:00，16:00，...
+                -->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="${log.max.size}"/>
+            </Policies>
+
+            <!--
+                DefaultRolloverStrategy指定了当触发rollover时的默认策略, max参数指定了计数器的最大值。一旦计数器达到了最大值，过旧的文件将被删除。
+                与filePattern搭配使用，与filePattern搭配使用="${log.base}/${log.moduleName}/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log.gz">
+                注意：这里的i就是一个计数器
+            -->
+            <!-- 指定每天的最大压缩包个数，默认7个，超过了会覆盖之前的 -->
+            <DefaultRolloverStrategy max="${log.max.number}">
+                <!-- maxDepth指定了目录扫描深度，为2表示扫描baseDir文件夹及其子文件夹 -->
+                <Delete basePath="${log.base}/${log.moduleName}" maxDepth="2">
+                    <!-- 文件名需满足的条件，这里只删除info的信息-->
+                    <IfFileName glob="*/info-*-*.log.gz"/>
+                    <!-- 文件修改时间需要满足的条件，这里设置是30d-->
+                    <IfLastModified age="${log.max.history}"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+        <!-- 内容形式同上面的打印所有信息 -->
+        <!-- 存储所有error信息 -->
+        <RollingFile name="FILE.ERROR"
+                     fileName="${log.base}/${log.moduleName}/error.log"
+                     filePattern="${log.base}/${log.moduleName}/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="${pattern}"/>
+            <Filters>
+                <ThresholdFilter level="fatal" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="${log.max.size}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="${log.max.number}">
+                <Delete basePath="${log.base}/${log.moduleName}" maxDepth="2">
+                    <IfFileName glob="*/error-*-*.log.gz"/>
+                    <IfLastModified age="${log.max.history}"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+
+        <!-- 存储所有warn信息 -->
+        <RollingFile name="FILE.WARN" fileName="${log.base}/${log.moduleName}/warn.log"
+                     filePattern="${log.base}/${log.moduleName}/$${date:yyyy-MM}/warn-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="${pattern}"/>
+            <Filters>
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="${log.max.size}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="${log.max.number}">
+                <Delete basePath="${log.base}/${log.moduleName}" maxDepth="2">
+                    <IfFileName glob="*/warn-*-*.log.gz"/>
+                    <IfLastModified age="${log.max.history}"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+
+        <!-- 存储所有debug信息 -->
+        <RollingFile name="FILE.DEBUG"
+                     fileName="${log.base}/${log.moduleName}/debug.log"
+                     filePattern="${log.base}/${log.moduleName}/$${date:yyyy-MM}/debug-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="${pattern}"/>
+            <Filters>
+                <ThresholdFilter level="info" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="${log.max.size}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="${log.max.number}">
+                <Delete basePath="${log.base}/${log.moduleName}" maxDepth="2">
+                    <IfFileName glob="*/debug-*-*.log.gz"/>
+                    <IfLastModified age="${log.max.history}"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+
+        <!-- 存储所有other信息 -->
+        <RollingFile name="FILE.OTHER"
+                     fileName="${log.base}/${log.moduleName}/other.log"
+                     filePattern="${log.base}/${log.moduleName}/$${date:yyyy-MM}/other-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="${pattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="${log.max.size}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="${log.max.number}">
+                <Delete basePath="${log.base}/${log.moduleName}" maxDepth="2">
+                    <IfFileName glob="*/other-*-*.log.gz"/>
+                    <IfLastModified age="${log.max.history}"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+
+        <!-- 存储所有time超时信息 -->
+        <RollingFile name="REQUEST.TIME"
+                     fileName="${log.base}/${log.moduleName}/requestTime.log"
+                     filePattern="${log.base}/${log.moduleName}/$${date:yyyy-MM}/requestTime-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="${pattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="${log.max.size}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="${log.max.number}">
+                <Delete basePath="${log.base}/${log.moduleName}" maxDepth="2">
+                    <IfFileName glob="*/requestTime-*-*.log.gz"/>
+                    <IfLastModified age="${log.max.history}"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- root logger 配置,全局配置，默认所有的Logger都继承此配置 -->
+        <!-- AsyncRoot - 异步记录日志 - 需要LMAX Disruptor的jar包支持 -->
+        <AsyncRoot level="${logger.level}">
+            <!-- ref关联到上面的appender-->
+            <appender-ref ref="FILE.OTHER"/>
+            <appender-ref ref="Console"/>
+        </AsyncRoot>
+        <!-- 异步记录日志 -->
+        <AsyncLogger name="log" level="${logger.level}" additivity="false">
+            <appender-ref ref="FILE.DEBUG"/>
+            <appender-ref ref="FILE.INFO"/>
+            <appender-ref ref="FILE.WARN"/>
+            <appender-ref ref="FILE.ERROR"/>
+        </AsyncLogger>
+        <AsyncLogger name="requestTime" level="${logger.level}" additivity="false">
+            <appender-ref ref="REQUEST.TIME"/>
+        </AsyncLogger>
+    </Loggers>
+</Configuration>

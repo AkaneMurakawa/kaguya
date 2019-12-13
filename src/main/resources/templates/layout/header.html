@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <header th:fragment="header">
+        <link th:href="@{/css/common.css}">
+        <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+        <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+        <div class="content-wrapper">
+            <div class="d-flex flex-column flex-md-row align-items-center p-4 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+                <h4 class="my-0 mr-md-auto" style="color: #3090e4;">Kaguya by akane</h4>
+
+                <nav class="my-2 my-md-0 mr-md-3" v-for="category in categories">
+                    <a style="color: rgb(48, 144, 228); font-weight: normal" class="p-2" :href="'/docs/' + category.name + '/' + category.categoryId">
+                        {{category.name}}
+                    </a>
+                </nav>
+            </div>
+        </div>
+        <script th:src="@{/js/common/common.js}"></script>
+    </header>
+</body>
+</html>

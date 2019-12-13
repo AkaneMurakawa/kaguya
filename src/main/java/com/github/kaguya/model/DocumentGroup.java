@@ -1,0 +1,27 @@
+package com.github.kaguya.model;
+
+import lombok.Data;
+
+import javax.persistence.Transient;
+import java.io.Serializable;
+import java.util.List;
+
+@Data
+public class DocumentGroup implements Serializable {
+    private static final long serialVersionUID = 1L;
+    /** 主键 */
+    private Long tid;
+    /** 文档id */
+    private Long documentId;
+    /** 父类id */
+    private Long parentId;
+    /** 分类id */
+    private Long categoryId;
+    /** 展示顺序id */
+    private Integer orderId;
+    /** 标题 */
+    private String title;
+    /** 子类 */
+    @Transient
+    List<DocumentGroup> children = null;
+}
