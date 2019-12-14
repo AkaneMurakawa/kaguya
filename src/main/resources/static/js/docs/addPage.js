@@ -98,6 +98,7 @@ var App = new Vue({
                     categoryId: '该项不能为空'
                 },
                 submitHandler: function() {
+                    $("#submit").attr("disabled", true);
                     vm.save();
                 }
             });
@@ -115,6 +116,7 @@ var App = new Vue({
                 async: false,
                 success : function (res) {
                     alert(res.msg);
+                    $("#submit").attr("disabled", false);
                 },
                 error: function() {
                     console.log("error");

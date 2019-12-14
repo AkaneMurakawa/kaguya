@@ -12,6 +12,7 @@ import com.github.kaguya.model.DocumentTreeDTO;
 import com.github.kaguya.model.DocumentVO;
 import com.github.kaguya.service.DocumentGroupService;
 import com.github.kaguya.util.SnowFlake;
+import lombok.Synchronized;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -81,6 +82,12 @@ public class DocumentGroupServiceImpl implements DocumentGroupService {
         return documentGroupMapper.getParents(categoryId);
     }
 
+    /**
+     * 获取下一个orderId
+     * @param categoryId
+     * @param parentId
+     * @return
+     */
     public Integer getNextOrderId(Long categoryId, Long parentId){
         // 获取最大的orderId
         Integer orderId = documentGroupMapper.getMaxOrderIdBy(categoryId, parentId);
@@ -99,13 +106,14 @@ public class DocumentGroupServiceImpl implements DocumentGroupService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @Synchronized
     public ResponseMsg add(DocumentVO documentVO) {
         // 设置默认的父类ID
         if (null == documentVO.getParentId()){
             documentVO.setParentId(CommonConstant.DEFAULT_PARENT_ID);
         }
 
-        Integer orderId = getNextOrderId(documentVO.getParentId(), documentVO.getParentId());
+        Integer orderId = getNextOrderId(documentVO.getCategoryId(), documentVO.getParentId());
         Long documentId = SnowFlake.generateId();
 
         DocumentGroup documentGroup = new DocumentGroup()

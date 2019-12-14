@@ -1,5 +1,6 @@
 package com.github.kaguya.controller;
 
+import com.github.kaguya.annotation.LoginPermission;
 import com.github.kaguya.exception.BusinessException;
 import com.github.kaguya.exception.model.ResponseMsg;
 import com.github.kaguya.model.Document;
@@ -68,12 +69,14 @@ public class DocumentController {
     }
 
     @RequestMapping("addPage")
+    @LoginPermission
     public String addPage(){
         return "docs/addPage";
     }
 
     @PostMapping("add")
     @ResponseBody
+    @LoginPermission
     public ResponseMsg add(@RequestBody DocumentVO documentVO){
         return documentGroupService.add(documentVO);
     }
