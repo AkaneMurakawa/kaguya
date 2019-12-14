@@ -33,26 +33,48 @@ var App = new Vue({
     el: '.docs',
     data: function(){
         return{
-            formData: []
+            categories: [],
+            parents: [],
+            document: {
+                title: '',
+                content: '',
+                contentHTML: '',
+                categoryId: '',
+                parentId: ''
+            }
         }
     },
-    created : function(){
+    created: function(){
+        this.init();
     },
     mounted: function(){
     },
+    watch: {
+        'document.categoryId': function(value){
+            if (value !== ''){
+                var vm = this;
+                $.ajax({
+                    url: BASIC_URL + "/getParentsId/" + vm.document.categoryId,
+                    type: "GET",
+                    async: true,
+                    success : function (res) {
+                        vm.parents = res.data || {};
+                    },
+                    error: function() {
+                        console.log("error");
+                    },
+                });
+            }
+        }
+    },
     methods: {
-        submit : function(){
+        init : function(){
             var vm = this;
-            alert("submit");
-            vm.formData.contentHTML = editor.getHTML();
             $.ajax({
-                url: BASIC_URL + "/add",
-                type: "POST",
-                dataType: "json",
-                data: formData,
+                url: "/category/list",
+                type: "GET",
                 async: true,
                 success : function (res) {
-                    console.log(res);
                     vm.categories = res.data || {};
                 },
                 error: function() {
@@ -60,10 +82,44 @@ var App = new Vue({
                 },
             });
         },
+        submit : function(){
+            this.validate()
+        },
         validate: function () {
-            // editor.getMarkdown()); // 获取Markdown正常
-            // editor.getHTML(); // 获取HTML正常，需要开启saveHTMLToTextarea : true,
-            // 在前端直接传入的是HTMl，而不是markdown
+            var vm = this;
+            $("#docs-form").validate({
+                debug: true,//只验证不提交表单
+                rules:{
+                    title: {required: true},
+                    categoryId: {required: true}
+                },
+                messages: {
+                    title: '该项不能为空',
+                    categoryId: '该项不能为空'
+                },
+                submitHandler: function() {
+                    vm.save();
+                }
+            });
+        },
+        save: function () {
+            var vm = this;
+            vm.document.content = editor.getMarkdown();
+            vm.document.contentHTML = editor.getHTML();
+            $.ajax({
+                url: BASIC_URL + "/add",
+                type: "POST",
+                data: JSON.stringify(vm.document),
+                contentType: 'application/json;charset-UTF-8',
+                cache: false,
+                async: false,
+                success : function (res) {
+                    alert(res.msg);
+                },
+                error: function() {
+                    console.log("error");
+                },
+            });
         }
     }
 });

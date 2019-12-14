@@ -23,7 +23,7 @@ public class CategoryController {
 
     @ResponseBody
     @GetMapping("list")
-    public ResponseMsg list(){
+    public ResponseMsg list() {
         return ResponseMsg.buildSuccessResult(categoryService.listCategories());
     }
 }

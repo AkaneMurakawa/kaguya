@@ -3,8 +3,8 @@ package com.github.kaguya.controller;
 import com.github.kaguya.exception.BusinessException;
 import com.github.kaguya.exception.model.ResponseMsg;
 import com.github.kaguya.model.Document;
-import com.github.kaguya.model.DocumentDTO;
 import com.github.kaguya.model.DocumentTreeDTO;
+import com.github.kaguya.model.DocumentVO;
 import com.github.kaguya.service.DocumentGroupService;
 import com.github.kaguya.service.DocumentService;
 import org.springframework.stereotype.Controller;
@@ -73,9 +73,15 @@ public class DocumentController {
     }
 
     @PostMapping("add")
-    public String add(@RequestBody DocumentDTO documentDTO){
+    @ResponseBody
+    public ResponseMsg add(@RequestBody DocumentVO documentVO){
+        return documentGroupService.add(documentVO);
+    }
 
-        return "index";
+    @ResponseBody
+    @GetMapping("getParentsId/" + CATEGORY_ID)
+    public ResponseMsg getParentsId(@PathVariable("categoryId") Long categoryId){
+        return ResponseMsg.buildSuccessResult(documentGroupService.getParents(categoryId));
     }
 
 }

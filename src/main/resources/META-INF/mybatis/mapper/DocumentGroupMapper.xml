@@ -20,4 +20,21 @@
         parent_id = #{documentId}
       ORDER BY order_id
     </select>
+
+    <select id="getParents" resultType="com.github.kaguya.model.DocumentGroup">
+      SELECT
+        document_id, title
+      FROM document_group
+      WHERE
+        category_id = #{categoryId}
+    </select>
+
+    <select id="getMaxOrderIdBy" resultType="java.lang.Integer">
+      SELECT
+        MAX(order_id)
+      FROM document_group
+      WHERE
+        category_id = #{categoryId}
+        AND parent_id = #{parentId}
+    </select>
 </mapper>

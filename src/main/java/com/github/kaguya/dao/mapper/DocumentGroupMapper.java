@@ -18,4 +18,19 @@ public interface DocumentGroupMapper extends BaseMapper<DocumentGroup> {
      * 获得文档id下所有文档，按order_id升序
      */
     List<DocumentGroup> getDocsGroup(@Param("documentId") Long documentId);
+
+    /**
+     * 获取该分类id下的所有标题
+     * @param categoryId
+     * @return
+     */
+    List<DocumentGroup> getParents(@Param("categoryId")Long categoryId);
+
+    /**
+     * 获得分类id下最大的orderId
+     *
+     * @param categoryId
+     * @return
+     */
+    Integer getMaxOrderIdBy(@Param("categoryId")Long categoryId, @Param("parentId")Long parentId);
 }

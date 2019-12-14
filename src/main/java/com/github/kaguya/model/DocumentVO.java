@@ -5,8 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class DocumentDTO implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class DocumentVO implements Serializable {
     /** 父类id */
     private Long parentId;
     /** 分类id */

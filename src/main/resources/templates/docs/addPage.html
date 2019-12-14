@@ -6,7 +6,11 @@
     <link rel="stylesheet" th:href="@{/css/docs/add.css}">
     <link rel="stylesheet" th:href="@{/editormd/css/editormd.min.css}">
     <link rel="stylesheet" th:href="@{/editormd/css/editormd.preview.min.css}">
-
+    <style>
+        .error{
+            color:red;
+        }
+    </style>
 </head>
 <body>
     <header th:replace="~{/layout/header :: header}"></header>
@@ -14,46 +18,43 @@
     <div class="container-fluid docs">
         <div class="row">
             <div class="col-sm-12 col-md-12">
-                <form @submit.prevent="submit" class="docs-form">
+                <form @submit.prevent="submit" id="docs-form" class="docs-form">
                     <div class="row">
                         <div class="col-md-12" >
                             <div class="form-group-lg">
-                                <input v-model="formData.title" type="text" name="title" placeholder="请输入文档标题" class="form-control" maxlength="100" autofocus>
+                                <input v-model="document.title" type="text" name="title" placeholder="请输入文档标题" class="form-control" maxlength="100" autofocus>
                             </div>
                         </div>
                     </div>
                     <br/>
                     <div id="layout" style="width: 100%;height: 100%">
                         <div id="editormd">
-                            <textarea v-model="formData.content" name="content"></textarea>
+                            <textarea v-model="document.content" name="content"></textarea>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-4">
                             <div>
                                 <span>选择分类：</span>
-                                <select v-model="formData.categoryId" name="categoryId">
-                                    <option>请选择</option>
-                                    <option value="778445761024000">Java</option>
-                                    <option value="783999891935232">设计模式</option>
-                                    <option value="784000026152960">Spring</option>
-                                    <option value="784000227479552">数据结构</option>
+                                <select v-model.number="document.categoryId" name="categoryId" id="categoryId">
+                                    <option value="">请选择</option>
+                                    <option v-for="category in categories" :value="category.categoryId">{{category.name}}</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-4">
                             <div>
                                 <span>选择章节：</span>
-                                <select v-model="formData.parentId" name="parentId">
-                                    <option value="">请选择</option>
-                                    <option value="123456">第一章</option>
+                                <select  v-model.number="document.parentId" name="parentId">
+                                    <option value="0" selected>请选择</option>
+                                    <option v-for="parent in parents" :value="parent.documentId">{{parent.title}}</option>
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12" align="center">
-                            <button type="button" :click="submit" class="btn btn-success">发表</button>
+                            <button type="submit" class="btn btn-success">提交</button>
                         </div>
                     </div>
                 </form>
@@ -61,7 +62,6 @@
         </div>
     </div>
 
-    <script type="text/javascript" th:src="@{/js/docs/addPage.js}"></script>
     <!-- editormd -->
     <script type="text/javascript" th:src="@{/editormd/lib/marked.min.js}"></script>
     <script type="text/javascript" th:src="@{/editormd/lib/prettify.min.js}"></script>
@@ -71,5 +71,9 @@
     <script type="text/javascript" th:src="@{/editormd/lib/flowchart.min.js}"></script>
     <script type="text/javascript" th:src="@{/editormd/lib/jquery.flowchart.min.js}"></script>
     <script type="text/javascript" th:src="@{/editormd/editormd.min.js}"></script>
+    <!-- validate -->
+    <script src="https://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
+    <!-- vue -->
+    <script type="text/javascript" th:src="@{/js/docs/addPage.js}"></script>
 </body>
 </html>
