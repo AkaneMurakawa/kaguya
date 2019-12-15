@@ -12,7 +12,7 @@ import java.util.Objects;
 @Service
 public class DocumentServiceImpl implements DocumentService {
 
-    private final static String KEY_PREFIXE = "docs:content:";
+    private final static String KEY_PREFIX = "docs:content:";
     private final static long EXPIRE = 3600 * 24L;
 
     @Resource
@@ -22,14 +22,15 @@ public class DocumentServiceImpl implements DocumentService {
 
     /**
      * 获得文档的内容
+     *
      * @param documentId
      * @return
      */
     @Override
     public Document getDoc(Long documentId) {
-        String key = KEY_PREFIXE + documentId;
+        String key = KEY_PREFIX + documentId;
         Document document = (Document) redisDao.get(key);
-        if (Objects.isNull(document)){
+        if (Objects.isNull(document)) {
             Document example = new Document();
             example.setDocumentId(documentId);
             document = documentMapper.selectOne(example);

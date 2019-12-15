@@ -2,7 +2,7 @@ package com.github.kaguya.util;
 
 /**
  * Twitter雪花算法snowflake
- *
+ * <p>
  * 0  -  0000000000  0000000000  0000000000  0000000000  0  -  00000  -  00000  -  000000000000
  * 1位符号位-41位时间戳-10位(数据中心+机器Id)-|12位序列(自增的)
  * 符号位：始终为0，不可用。
@@ -22,38 +22,64 @@ public class SnowFlake {
      */
     private final static long START_TIME_STAMP = 1575856359000L;
 
-    /** 序列号占用的位数 */
+    /**
+     * 序列号占用的位数
+     */
     private final static long SEQUENCE_BIT = 12L;
-    /** 机器标识占用的位数 */
+    /**
+     * 机器标识占用的位数
+     */
     private final static long MACHINE_BIT = 8L;
-    /** 数据中心占用的位数 */
+    /**
+     * 数据中心占用的位数
+     */
     private final static long DATA_CENTER_BIT = 4L;
 
     /**
      * -1L ^ (-1L << n)表示占n个bit的数字的最大值是多少。
      * 例如：-1L ^ (-1L << 2)等于10进制的3，即二进制的11表示十进制3。
      */
-    /** 生成序列的掩码(0b111111111111=0xfff=4095) */
+    /**
+     * 生成序列的掩码(0b111111111111=0xfff=4095)
+     */
     private final static long MAX_SEQUENCE = -1L ^ (-1L << SEQUENCE_BIT);
-    /** 支持的最大机器标识ID 255 */
+    /**
+     * 支持的最大机器标识ID 255
+     */
     private final static long MAX_MACHINE_NUM = -1L ^ (-1L << MACHINE_BIT);
-    /** 支持的最大数据中心ID 15 */
+    /**
+     * 支持的最大数据中心ID 15
+     */
     private final static long MAX_DATACENTER_NUM = -1L ^ (-1L << DATA_CENTER_BIT);
 
-    /** 机器ID向左移12位 */
+    /**
+     * 机器ID向左移12位
+     */
     private final static long MACHINE_LEFT = SEQUENCE_BIT;
-    /** 数据中心ID向左移20位(12+8) */
+    /**
+     * 数据中心ID向左移20位(12+8)
+     */
     private final static long DATACENTER_LEFT = SEQUENCE_BIT + MACHINE_BIT;
-    /** 时间戳向左移24位(12+8+4) */
+    /**
+     * 时间戳向左移24位(12+8+4)
+     */
     private final static long TIMESTAMP_LEFT = DATACENTER_LEFT + DATA_CENTER_BIT;
 
-    /** 机器标识ID */
+    /**
+     * 机器标识ID
+     */
     private long machineId;
-    /** 数据中心ID */
+    /**
+     * 数据中心ID
+     */
     private long dataCenterId;
-    /** 毫秒内序列(0~4095) */
+    /**
+     * 毫秒内序列(0~4095)
+     */
     private long sequence = 0L;
-    /** 上次生成ID的时间截 */
+    /**
+     * 上次生成ID的时间截
+     */
     private long lastTimeStamp = -1L;
 
     private static SnowFlake snowFlake = new SnowFlake(1, 1);
@@ -69,7 +95,7 @@ public class SnowFlake {
         this.machineId = machineId;
     }
 
-    public static Long generateId(){
+    public static Long generateId() {
         long id = snowFlake.nextId();
         return id;
     }
@@ -130,7 +156,7 @@ public class SnowFlake {
         return System.currentTimeMillis();
     }
 
-    public static void main(String[] args)throws Exception {
+    public static void main(String[] args) throws Exception {
         long start = System.currentTimeMillis();
         for (int i = 0; i < 20191209; i++) {
             System.out.println(SnowFlake.generateId());

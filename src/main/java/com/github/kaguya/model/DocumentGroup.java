@@ -11,19 +11,33 @@ import java.util.List;
 @Accessors(chain = true)
 public class DocumentGroup implements Serializable {
     private static final long serialVersionUID = 1L;
-    /** 主键 */
+    /**
+     * 主键
+     */
     private Long tid;
-    /** 文档id */
+    /**
+     * 文档id
+     */
     private Long documentId;
-    /** 父类id */
+    /**
+     * 父类id
+     */
     private Long parentId;
-    /** 分类id */
+    /**
+     * 分类id
+     */
     private Long categoryId;
-    /** 展示顺序id */
+    /**
+     * 展示顺序id
+     */
     private Integer orderId;
-    /** 标题 */
+    /**
+     * 标题
+     */
     private String title;
-    /** 子类 */
+    /**
+     * 子类
+     */
     @Transient
     List<DocumentGroup> children = null;
 }

@@ -1,0 +1,12 @@
+# justauth
+justauth:
+  enabled: true
+  type:
+    github:
+      client-id: 5c2711630ff813639351
+      client-secret: b299707ee307ef05ccfee4d600482625383bd4be
+      redirect-uri: http://localhost:9420
+  cache:
+    type: redis
+    prefix: 'SOCIAL::STATE::'
+    timeout: 1h

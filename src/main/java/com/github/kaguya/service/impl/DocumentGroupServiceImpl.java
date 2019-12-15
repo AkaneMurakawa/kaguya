@@ -24,7 +24,7 @@ import java.util.Objects;
 @Service
 public class DocumentGroupServiceImpl implements DocumentGroupService {
 
-    private final static String KEY_PREFIXE = "docs:";
+    private final static String KEY_PREFIX = "docs:";
     private final static long EXPIRE = 3600 * 24L;
     private final static Integer PARENT_ID = 0;
 
@@ -37,12 +37,12 @@ public class DocumentGroupServiceImpl implements DocumentGroupService {
 
     @Override
     public DocumentTreeDTO getDocsTree(Long documentId) {
-        String key = KEY_PREFIXE + "tree:" + documentId;
-        DocumentTreeDTO documentGroups = (DocumentTreeDTO)redisDao.get(key);
-        if (Objects.isNull(documentGroups)){
+        String key = KEY_PREFIX + "tree:" + documentId;
+        DocumentTreeDTO documentGroups = (DocumentTreeDTO) redisDao.get(key);
+        if (Objects.isNull(documentGroups)) {
             // 获得分类id下所有一级文档
             List<DocumentGroup> root = documentGroupMapper.getDocsParent(documentId, PARENT_ID);
-            if (CollectionUtils.isEmpty(root)){
+            if (CollectionUtils.isEmpty(root)) {
                 return null;
             }
             // 遍历树形文档
@@ -56,15 +56,16 @@ public class DocumentGroupServiceImpl implements DocumentGroupService {
 
     /**
      * 遍历树形文档
+     *
      * @param root
      * @return
      */
-    private List<DocumentGroup> getDocsGroup(List<DocumentGroup> root){
+    private List<DocumentGroup> getDocsGroup(List<DocumentGroup> root) {
         for (DocumentGroup children : root) {
             List<DocumentGroup> node = documentGroupMapper.getDocsGroup(children.getDocumentId());
-            if (CollectionUtils.isEmpty(node)){
+            if (CollectionUtils.isEmpty(node)) {
                 continue;
-            }else {
+            } else {
                 List<DocumentGroup> docsGroup = getDocsGroup(node);
                 children.setChildren(docsGroup);
             }
@@ -74,6 +75,7 @@ public class DocumentGroupServiceImpl implements DocumentGroupService {
 
     /**
      * 获得父类id
+     *
      * @param categoryId
      * @return
      */
@@ -84,16 +86,17 @@ public class DocumentGroupServiceImpl implements DocumentGroupService {
 
     /**
      * 获取下一个orderId
+     *
      * @param categoryId
      * @param parentId
      * @return
      */
-    public Integer getNextOrderId(Long categoryId, Long parentId){
+    public Integer getNextOrderId(Long categoryId, Long parentId) {
         // 获取最大的orderId
         Integer orderId = documentGroupMapper.getMaxOrderIdBy(categoryId, parentId);
-        if (null == orderId){
+        if (null == orderId) {
             return 0;
-        }else {
+        } else {
             orderId += 1;
         }
         return orderId;
@@ -101,6 +104,7 @@ public class DocumentGroupServiceImpl implements DocumentGroupService {
 
     /**
      * 新增文档
+     *
      * @param documentVO
      * @return
      */
@@ -109,7 +113,7 @@ public class DocumentGroupServiceImpl implements DocumentGroupService {
     @Synchronized
     public ResponseMsg add(DocumentVO documentVO) {
         // 设置默认的父类ID
-        if (null == documentVO.getParentId()){
+        if (null == documentVO.getParentId()) {
             documentVO.setParentId(CommonConstant.DEFAULT_PARENT_ID);
         }
 
@@ -130,11 +134,11 @@ public class DocumentGroupServiceImpl implements DocumentGroupService {
                 .setCreateUser(SystemProperty.getAuthor());
         int result2 = documentMapper.insert(document);
 
-        if (result1 < 0 || result2 < 0){
+        if (result1 < 0 || result2 < 0) {
             return ResponseMsg.buildFailResult();
         }
         // 将HTML缓存到redis
-        String key = KEY_PREFIXE + "html:" + documentId;
+        String key = KEY_PREFIX + "html:" + documentId;
         redisDao.set(key, documentVO.getContentHTML());
         return ResponseMsg.buildSuccessResult();
     }

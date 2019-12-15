@@ -9,27 +9,17 @@ public class User {
     /**
      * 主键
      */
-    private Integer id;
+    private Long id;
 
     /**
      * 用户id
      */
-    private String usercode;
+    private Long userId;
 
     /**
      * 昵称
      */
     private String username;
-
-    /**
-     * 盐值
-     */
-    private String salt;
-
-    /**
-     * 密码hash
-     */
-    private String password;
 
     /**
      * 邮箱(登录账号)

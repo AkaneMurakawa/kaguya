@@ -6,7 +6,9 @@ import java.util.List;
 
 @Data
 public class DocumentTreeDTO {
-    /** 分类id */
+    /**
+     * 分类id
+     */
     private Long categoryId;
 
     List<DocumentGroup> groups;

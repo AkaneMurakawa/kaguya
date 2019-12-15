@@ -16,6 +16,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <justauth-spring-boot.version>1.1.0</justauth-spring-boot.version>
     </properties>
 
     <dependencies>
@@ -111,6 +112,12 @@
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
             <version>1.9.4</version>
+        </dependency>
+        <!-- JustAuth第三方授权登录的工具类库- -->
+        <dependency>
+            <groupId>com.xkcoding</groupId>
+            <artifactId>justauth-spring-boot-starter</artifactId>
+            <version>${justauth-spring-boot.version}</version>
         </dependency>
         <!-- thymeleaf 和热部署 -->
         <dependency>

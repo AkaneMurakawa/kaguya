@@ -4,5 +4,6 @@ import com.github.kaguya.model.User;
 
 public interface UserService {
 
-    User getUser(String user, String password);
+    User getUser(String email);
+
 }

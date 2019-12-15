@@ -30,19 +30,20 @@ public class DocumentController {
 
     /**
      * 访问分类
+     *
      * @param categoryId
      * @return
      */
     @GetMapping(DOC_NAME + "/" + CATEGORY_ID)
-    public ModelAndView getCategory(@PathVariable("categoryId") Long categoryId){
+    public ModelAndView getCategory(@PathVariable("categoryId") Long categoryId) {
         ModelAndView modelAndView = new ModelAndView();
 
         DocumentTreeDTO docsTree = documentGroupService.getDocsTree(categoryId);
-        if (!Objects.isNull(docsTree)){
+        if (!Objects.isNull(docsTree)) {
             Long documentId = docsTree.getGroups().get(0).getDocumentId();
             Document doc = documentService.getDoc(documentId);
             modelAndView.addObject("doc", doc);
-        }else{
+        } else {
             throw new BusinessException(ResponseMsg.buildFailResult("category not found"));
         }
         modelAndView.addObject("docsTree", docsTree);
@@ -52,11 +53,12 @@ public class DocumentController {
 
     /**
      * 访问文档内容
+     *
      * @param categoryId
      * @return
      */
     @GetMapping(DOC_NAME + "/" + CATEGORY_ID + "/" + DOC_ID)
-    public ModelAndView docs(@PathVariable("categoryId") Long categoryId, @PathVariable("docId") Long docId){
+    public ModelAndView docs(@PathVariable("categoryId") Long categoryId, @PathVariable("docId") Long docId) {
         ModelAndView modelAndView = new ModelAndView();
 
         DocumentTreeDTO docsTree = documentGroupService.getDocsTree(categoryId);
@@ -70,20 +72,20 @@ public class DocumentController {
 
     @RequestMapping("addPage")
     @LoginPermission
-    public String addPage(){
+    public String addPage() {
         return "docs/addPage";
     }
 
     @PostMapping("add")
     @ResponseBody
     @LoginPermission
-    public ResponseMsg add(@RequestBody DocumentVO documentVO){
+    public ResponseMsg add(@RequestBody DocumentVO documentVO) {
         return documentGroupService.add(documentVO);
     }
 
     @ResponseBody
     @GetMapping("getParentsId/" + CATEGORY_ID)
-    public ResponseMsg getParentsId(@PathVariable("categoryId") Long categoryId){
+    public ResponseMsg getParentsId(@PathVariable("categoryId") Long categoryId) {
         return ResponseMsg.buildSuccessResult(documentGroupService.getParents(categoryId));
     }
 

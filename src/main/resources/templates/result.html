@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kaguya document tree: record your life</title>
+    <script type="text/javascript">
+        var timer;
+        //启动跳转的定时器
+        function startTimes() {
+            timer = window.setInterval(showSecond,1000);
+        }
+
+        var i = 3;
+        function showSecond() {
+            if (i > 0) {
+                i--;
+                document.getElementById("second").innerHTML = i;
+            }else {
+                window.clearInterval(timer);
+                location.href = "/loginPage";
+            }
+        }
+
+        //取消跳转
+        function resetTimer() {
+            if (timer != null && timer != undefined) {
+                window.clearInterval(timer);
+                location.href = "/loginPage";
+            }
+        }
+    </script>
+
+</head>
+<body onload="startTimes();">
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<h1 align="center">Welcome to Kaguya.</h1>
+<h2 align="center">
+
+    <b>${code}</b>&nbsp;<span id="second">3</span>&nbsp;秒后将自动跳转到登录界面，立即跳转请点击&nbsp;
+    <a  href="javascript:resetTimer();">返回</a>
+</h2>
+</body>
+</html>

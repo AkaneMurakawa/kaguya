@@ -11,13 +11,21 @@ import java.io.Serializable;
 @Accessors(chain = true)
 public class Category implements Serializable {
     private static final long serialVersionUID = 1L;
-    /** 主键 */
+    /**
+     * 主键
+     */
     private Long tid;
-    /** 分类id */
+    /**
+     * 分类id
+     */
     private Long categoryId;
-    /** 展示顺序id */
+    /**
+     * 展示顺序id
+     */
     private Integer orderId;
-    /** 名称 */
+    /**
+     * 名称
+     */
     private String name;
 
 }

@@ -9,6 +9,6 @@ public interface CategoryService {
 
     List<Category> listCategories();
 
-    ResponseMsg add(Category category);
+    ResponseMsg add(String name);
 
 }

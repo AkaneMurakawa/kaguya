@@ -1,7 +1,6 @@
 package com.github.kaguya.controller;
 
 import com.github.kaguya.exception.model.ResponseMsg;
-import com.github.kaguya.model.Category;
 import com.github.kaguya.service.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +16,8 @@ public class CategoryController {
 
     @PostMapping("add")
     @ResponseBody
-    public ResponseMsg add(@RequestBody Category category){
-        return categoryService.add(category);
+    public ResponseMsg add(@RequestParam String name){
+        return categoryService.add(name);
     }
 
     @ResponseBody

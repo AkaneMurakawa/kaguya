@@ -6,14 +6,24 @@ import java.io.Serializable;
 
 @Data
 public class DocumentVO implements Serializable {
-    /** 父类id */
+    /**
+     * 父类id
+     */
     private Long parentId;
-    /** 分类id */
+    /**
+     * 分类id
+     */
     private Long categoryId;
-    /** 标题 */
+    /**
+     * 标题
+     */
     private String title;
-    /** 内容Markdown */
+    /**
+     * 内容Markdown
+     */
     private String content;
-    /** 内容Html */
+    /**
+     * 内容Html
+     */
     private String contentHTML;
 }

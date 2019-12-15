@@ -10,20 +10,36 @@ import java.util.Date;
 @Accessors(chain = true)
 public class Document implements Serializable {
     private static final long serialVersionUID = 1L;
-    /** 主键 */
+    /**
+     * 主键
+     */
     private Long tid;
-    /** 文档id */
+    /**
+     * 文档id
+     */
     private Long documentId;
-    /** 创建时间 */
+    /**
+     * 创建时间
+     */
     private Date createTime;
-    /** 更新时间 */
+    /**
+     * 更新时间
+     */
     private Date updateTime;
-    /** 创建人 */
+    /**
+     * 创建人
+     */
     private String createUser;
-    /** 更新人 */
+    /**
+     * 更新人
+     */
     private String updateUser;
-    /** 内容 */
+    /**
+     * 内容
+     */
     private String content;
-    /** 浏览次数 */
+    /**
+     * 浏览次数
+     */
     private long views;
 }
