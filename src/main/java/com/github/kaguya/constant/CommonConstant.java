@@ -5,7 +5,5 @@ package com.github.kaguya.constant;
  */
 public interface CommonConstant {
 
-    String SESSION_LOGIN_USER = "userSession";
-
     Long DEFAULT_PARENT_ID = 0L;
 }

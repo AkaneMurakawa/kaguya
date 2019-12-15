@@ -1,5 +1,6 @@
 package com.github.kaguya;
 
+import com.github.kaguya.config.SessionContainer;
 import com.github.kaguya.dao.mapper.AdminOAuthMapper;
 import com.github.kaguya.dao.mapper.CategoryMapper;
 import com.github.kaguya.dao.mapper.UserMapper;
@@ -68,7 +69,7 @@ public class KaguyaApplicationTests {
         AdminOAuth adminOAuth = new AdminOAuth();
         adminOAuth.setUserId(userId);
         adminOAuth.setSalt(SecurityUtil.sha256Hex(userId.toString()));
-        adminOAuth.setPassword(SecurityUtil.sha256Hex("123456"));
+        adminOAuth.setPassword(SessionContainer.getPassword("123456", adminOAuth.getSalt()));
         adminOAuthMapper.insert(adminOAuth);
     }
 

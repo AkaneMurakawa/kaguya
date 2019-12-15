@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Kaguya document tree: record your life</title>
@@ -43,8 +43,7 @@
 <br/>
 <h1 align="center">Welcome to Kaguya.</h1>
 <h2 align="center">
-
-    <b>${code}</b>&nbsp;<span id="second">3</span>&nbsp;秒后将自动跳转到登录界面，立即跳转请点击&nbsp;
+    <b th:text="${result.msg}"></b>&nbsp;<span id="second">3</span>&nbsp;秒后将自动跳转到登录界面，立即跳转请点击&nbsp;
     <a  href="javascript:resetTimer();">返回</a>
 </h2>
 </body>

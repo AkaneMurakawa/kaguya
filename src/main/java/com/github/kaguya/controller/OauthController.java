@@ -3,13 +3,13 @@ package com.github.kaguya.controller;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.github.kaguya.config.SessionContainer;
 import com.github.kaguya.config.SystemProperty;
 import com.github.kaguya.exception.model.ResponseMsg;
 import com.github.kaguya.model.AdminOAuth;
 import com.github.kaguya.model.User;
 import com.github.kaguya.service.AdminOAuthService;
 import com.github.kaguya.service.UserService;
-import com.github.kaguya.util.SecurityUtil;
 import com.xkcoding.justauth.AuthRequestFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +40,6 @@ import java.util.stream.Collectors;
 public class OauthController {
 
     private final AuthRequestFactory factory;
-    private static final String PASSWORD_PREFIX = "kaguya";
 
     @Resource
     private UserService userService;
@@ -91,7 +90,7 @@ public class OauthController {
     }
 
     private ModelAndView buildFailResult(ModelAndView modelAndView) {
-        modelAndView.addObject(ResponseMsg.buildFailResult("认证失败"));
+        modelAndView.addObject("result", ResponseMsg.buildFailResult("认证失败"));
         modelAndView.setViewName("/result");
         return modelAndView;
     }
@@ -99,8 +98,8 @@ public class OauthController {
     /**
      * 账号密码登录认证
      */
-    @PostMapping("/login/")
-    public ModelAndView renderAuth(@RequestParam("email") String email, @RequestParam("passwd") String password,
+    @PostMapping("/login")
+    public ModelAndView renderAuth(@RequestParam("email") String email, @RequestParam("password") String password,
                                    HttpServletRequest request, HttpServletResponse response) {
         ModelAndView modelAndView = new ModelAndView();
         // 认证邮箱
@@ -113,12 +112,14 @@ public class OauthController {
         if (null == auth) {
             return buildFailResult(modelAndView);
         }
-        String inputPassword = SecurityUtil.sha256Hex(PASSWORD_PREFIX + password + auth.getSalt());
+        String inputPassword = SessionContainer.getPassword(password, auth.getSalt());
         if (!inputPassword.equals(auth.getPassword())) {
             return buildFailResult(modelAndView);
         }
 
-        // cookie session
+        // session cookie
+        String cookieValue = SessionContainer.setCookieValue(auth);
+        SessionContainer.setSessionCookie(request, response, cookieValue, 0);
         modelAndView.setViewName("/index");
         return modelAndView;
     }

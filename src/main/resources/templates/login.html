@@ -42,20 +42,22 @@
     </style>
 
 </head>
-<body class="text-center">
-    <form class="form-signin">
+<body class="text-center content-wrap">
+    <form class="form-signin" action="/oauth/login" method="post">
         <img class="mb-4" src="/docs/4.3/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal">辉夜~</h1>
+
         <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+        <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required="" autofocus="">
+
         <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+        <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required="">
 
         <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
 
         <h5 class="h3 mb-3 font-weight-normal">第三方登录~</h5>
-        <a href="" aria-label="link github" class="icon-github">
-            <svg aria-hidden="true" class="icon"><use xlink:href="#csdnreg-github-color"></use></svg></a>
+
+        <a href="/oauth/login/github">github</a>
         <p class="mt-5 mb-3 text-muted">
             Copyright&copy;
             <script type="text/javascript">
