@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Locale;
 
+/**
+ * I18解析器
+ */
 public class I18nLocaleResolver implements LocaleResolver {
 
     private static final String SESSION_LAN = "lang";

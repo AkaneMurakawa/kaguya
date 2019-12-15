@@ -3,7 +3,7 @@ package com.github.kaguya.controller;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
-import com.github.kaguya.config.SessionContainer;
+import com.github.kaguya.config.SessionCookieContainer;
 import com.github.kaguya.config.SystemProperty;
 import com.github.kaguya.exception.model.ResponseMsg;
 import com.github.kaguya.model.AdminOAuth;
@@ -112,14 +112,14 @@ public class OauthController {
         if (null == auth) {
             return buildFailResult(modelAndView);
         }
-        String inputPassword = SessionContainer.getPassword(password, auth.getSalt());
+        String inputPassword = SessionCookieContainer.getPassword(password, auth.getSalt());
         if (!inputPassword.equals(auth.getPassword())) {
             return buildFailResult(modelAndView);
         }
 
         // session cookie
-        String cookieValue = SessionContainer.setCookieValue(auth);
-        SessionContainer.setSessionCookie(request, response, cookieValue, 0);
+        String cookieValue = SessionCookieContainer.setCookieValue(auth);
+        SessionCookieContainer.setSessionCookie(request, response, cookieValue, 0);
         modelAndView.setViewName("/index");
         return modelAndView;
     }

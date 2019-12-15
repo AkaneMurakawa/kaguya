@@ -15,6 +15,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 /**
+ * 登录注解处理器
  * @Aspect 切面
  * @Order 注解排序
  */
@@ -51,7 +52,7 @@ public class LoginPermissionAspect {
         HttpServletRequest request = requestAttributes.getRequest();
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
-            if (SessionContainer.getSessionCookie().equals(cookie.getName())) {
+            if (SessionCookieContainer.getSessionCookie().equals(cookie.getName())) {
                 return joinPoint.proceed();
             }
         }

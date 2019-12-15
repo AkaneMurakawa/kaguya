@@ -9,8 +9,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * 登陆控制容器
+ */
 @Slf4j
-public class SessionContainer {
+public class SessionCookieContainer {
 
     private static final String SESSION_COOKIE = "_session_";
     private static final String ROLE_ADMIN = "admin";
