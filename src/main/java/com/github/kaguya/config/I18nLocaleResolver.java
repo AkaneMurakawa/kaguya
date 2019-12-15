@@ -17,11 +17,11 @@ public class I18nLocaleResolver implements LocaleResolver {
         HttpSession session = request.getSession();
         String lang = (String) session.getAttribute(SESSION_LAN);
         Locale locale = Locale.getDefault();
-        if(!StringUtils.isEmpty(lang)){
+        if (!StringUtils.isEmpty(lang)) {
             String[] split = lang.split("_");
-            try{
+            try {
                 locale = new Locale(split[0], split[1]);
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }

@@ -24,7 +24,7 @@ public class KaguyaApplicationTests {
     private AdminOAuthMapper adminOAuthMapper;
 
     @Test
-    public void category(){
+    public void category() {
         Category category0 = new Category()
                 .setCategoryId(SnowFlake.generateId())
                 .setName("主页")
@@ -57,7 +57,7 @@ public class KaguyaApplicationTests {
     }
 
     @Test
-    public void user(){
+    public void user() {
         Long userId = SnowFlake.generateId();
         User user = new User();
         user.setUserId(userId);

@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public ResponseMsg defaultExceptionHandler(Exception e) throws Exception{
+    public ResponseMsg defaultExceptionHandler(Exception e) throws Exception {
         return ResponseMsg.buildFailResult("System error!");
     }
 

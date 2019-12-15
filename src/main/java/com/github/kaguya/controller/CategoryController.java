@@ -16,7 +16,7 @@ public class CategoryController {
 
     @PostMapping("add")
     @ResponseBody
-    public ResponseMsg add(@RequestParam String name){
+    public ResponseMsg add(@RequestParam String name) {
         return categoryService.add(name);
     }
 

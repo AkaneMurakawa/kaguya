@@ -90,7 +90,7 @@ public class OauthController {
         }
     }
 
-    private ModelAndView buildFailResult(ModelAndView modelAndView){
+    private ModelAndView buildFailResult(ModelAndView modelAndView) {
         modelAndView.addObject(ResponseMsg.buildFailResult("认证失败"));
         modelAndView.setViewName("/result");
         return modelAndView;
@@ -110,11 +110,11 @@ public class OauthController {
         }
         // 认证密码
         AdminOAuth auth = adminOAuthService.getAdminOAuth(user.getUserId());
-        if (null == auth){
+        if (null == auth) {
             return buildFailResult(modelAndView);
         }
         String inputPassword = SecurityUtil.sha256Hex(PASSWORD_PREFIX + password + auth.getSalt());
-        if(!inputPassword.equals(auth.getPassword())){
+        if (!inputPassword.equals(auth.getPassword())) {
             return buildFailResult(modelAndView);
         }
 

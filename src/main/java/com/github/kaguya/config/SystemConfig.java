@@ -11,7 +11,7 @@ import org.springframework.web.servlet.LocaleResolver;
 public class SystemConfig {
 
     @Bean("localeResolver")
-    public LocaleResolver localeResolver(){
+    public LocaleResolver localeResolver() {
         return new I18nLocaleResolver();
     }
 }

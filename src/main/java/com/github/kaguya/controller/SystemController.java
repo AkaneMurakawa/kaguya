@@ -19,22 +19,22 @@ public class SystemController {
     private UserService userService;
 
     @RequestMapping("/")
-    public String index(){
+    public String index() {
         return "index";
     }
 
     @RequestMapping("/loginPage")
-    public String loginPage(){
+    public String loginPage() {
         return "login";
     }
 
     @RequestMapping("/login")
-    public String login(HttpServletRequest request){
+    public String login(HttpServletRequest request) {
 
         User user = null;
         // TODO
         // userService.getUser();
-        if (null == user){
+        if (null == user) {
             return "login";
         }
         HttpSession session = request.getSession();

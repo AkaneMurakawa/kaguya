@@ -12,7 +12,7 @@ public interface DocumentGroupMapper extends BaseMapper<DocumentGroup> {
     /**
      * 获得分类id下所有一级文档，按order_id升序
      */
-    List<DocumentGroup> getDocsParent(@Param("categoryId") Long categoryId, @Param("ROOT")Integer ROOT);
+    List<DocumentGroup> getDocsParent(@Param("categoryId") Long categoryId, @Param("ROOT") Integer ROOT);
 
     /**
      * 获得文档id下所有文档，按order_id升序
@@ -21,10 +21,11 @@ public interface DocumentGroupMapper extends BaseMapper<DocumentGroup> {
 
     /**
      * 获取该分类id下的所有标题
+     *
      * @param categoryId
      * @return
      */
-    List<DocumentGroup> getParents(@Param("categoryId")Long categoryId);
+    List<DocumentGroup> getParents(@Param("categoryId") Long categoryId);
 
     /**
      * 获得分类id下最大的orderId
@@ -32,5 +33,5 @@ public interface DocumentGroupMapper extends BaseMapper<DocumentGroup> {
      * @param categoryId
      * @return
      */
-    Integer getMaxOrderIdBy(@Param("categoryId")Long categoryId, @Param("parentId")Long parentId);
+    Integer getMaxOrderIdBy(@Param("categoryId") Long categoryId, @Param("parentId") Long parentId);
 }

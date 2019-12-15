@@ -31,49 +31,49 @@ public class ResponseMsg implements Serializable {
      */
     private Object data;
 
-    public void setDefaultSuccessResult(){
+    public void setDefaultSuccessResult() {
         setResult(SUCCESS_RESULT);
         setMsg(SUCCESS_MSG);
     }
 
-    public void setDefaultFailResult(){
+    public void setDefaultFailResult() {
         setResult(FAIL_RESULT);
         setMsg(FAIL_MSG);
     }
 
-    public static ResponseMsg buildSuccessResult(){
+    public static ResponseMsg buildSuccessResult() {
         ResponseMsg response = new ResponseMsg();
         response.setDefaultSuccessResult();
         return response;
     }
 
-    public static ResponseMsg buildSuccessResult(Object data){
+    public static ResponseMsg buildSuccessResult(Object data) {
         ResponseMsg response = new ResponseMsg();
         response.setData(data);
         response.setDefaultSuccessResult();
         return response;
     }
 
-    public static ResponseMsg buildFailResult(){
+    public static ResponseMsg buildFailResult() {
         ResponseMsg response = new ResponseMsg();
         response.setDefaultFailResult();
         return response;
     }
 
-    public static ResponseMsg buildFailResult(String msg){
+    public static ResponseMsg buildFailResult(String msg) {
         ResponseMsg response = new ResponseMsg();
         response.setResult(FAIL_RESULT);
         response.setMsg(msg);
         return response;
     }
 
-    public static ResponseMsg buildFailResult(List<ErrorMsg> errors){
+    public static ResponseMsg buildFailResult(List<ErrorMsg> errors) {
         ResponseMsg response = ResponseMsg.buildFailResult();
         response.setErrors(errors);
         return response;
     }
 
-    public static ResponseMsg buildFailResult(String msg, List<ErrorMsg> errors){
+    public static ResponseMsg buildFailResult(String msg, List<ErrorMsg> errors) {
         ResponseMsg response = ResponseMsg.buildFailResult(msg);
         response.setErrors(errors);
         return response;
