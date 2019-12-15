@@ -11,7 +11,7 @@
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 15/12/2019 18:31:31
+ Date: 15/12/2019 23:54:58
 */
 
 SET NAMES utf8mb4;
@@ -31,6 +31,11 @@ CREATE TABLE `admin_o_auth`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '管理员认证' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Records of admin_o_auth
+-- ----------------------------
+INSERT INTO `admin_o_auth` VALUES (1, 9519160447995904, 'd7e76943b0ccf0a2f548704d65e0e99ff53ea61abac0feca4ec1fe883375bbbf', '2904f8070d98eebb7ffac31f86337aaf3fa3445e96bb591adc5421c15f46741a');
+
+-- ----------------------------
 -- Table structure for category
 -- ----------------------------
 DROP TABLE IF EXISTS `category`;
@@ -42,6 +47,15 @@ CREATE TABLE `category`  (
   PRIMARY KEY (`tid`) USING BTREE,
   UNIQUE INDEX `uk_category_id`(`category_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '分类' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of category
+-- ----------------------------
+INSERT INTO `category` VALUES (1, 9519171638398976, '主页', 0);
+INSERT INTO `category` VALUES (2, 9519171957166080, 'Java', 1);
+INSERT INTO `category` VALUES (3, 9519172041052160, '设计模式', 2);
+INSERT INTO `category` VALUES (4, 9519172208824320, 'Spring', 3);
+INSERT INTO `category` VALUES (5, 9519172326264832, '数据结构', 4);
 
 -- ----------------------------
 -- Table structure for document
@@ -114,5 +128,10 @@ CREATE TABLE `user`  (
   UNIQUE INDEX `uk_email`(`email`) USING BTREE,
   UNIQUE INDEX `uk_user_id`(`user_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户基本信息表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of user
+-- ----------------------------
+INSERT INTO `user` VALUES (1, 9519160447995904, 'AkaneMurakwa', 'chenshjing@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;
