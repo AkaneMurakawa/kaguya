@@ -11,11 +11,24 @@
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 13/12/2019 12:44:09
+ Date: 15/12/2019 18:31:31
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for admin_o_auth
+-- ----------------------------
+DROP TABLE IF EXISTS `admin_o_auth`;
+CREATE TABLE `admin_o_auth`  (
+  `tid` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `user_id` bigint(11) NOT NULL COMMENT '用户id',
+  `salt` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '盐值',
+  `password` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '密码',
+  PRIMARY KEY (`tid`) USING BTREE,
+  UNIQUE INDEX `uk_user_id`(`user_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '管理员认证' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for category
@@ -28,15 +41,7 @@ CREATE TABLE `category`  (
   `order_id` int(2) NOT NULL DEFAULT 0 COMMENT '展示顺序，从0开始',
   PRIMARY KEY (`tid`) USING BTREE,
   UNIQUE INDEX `uk_category_id`(`category_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '分类' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of category
--- ----------------------------
-INSERT INTO `category` VALUES (1, 778445761024000, 'Java', 0);
-INSERT INTO `category` VALUES (2, 783999891935232, '设计模式', 1);
-INSERT INTO `category` VALUES (3, 784000026152960, 'Spring', 2);
-INSERT INTO `category` VALUES (4, 784000227479552, '数据结构', 3);
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '分类' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for document
@@ -71,5 +76,43 @@ CREATE TABLE `document_group`  (
   INDEX `idx_parent_id`(`parent_id`) USING BTREE,
   INDEX `idx_category_id`(`category_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '树形文档' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for oauth
+-- ----------------------------
+DROP TABLE IF EXISTS `oauth`;
+CREATE TABLE `oauth`  (
+  `id` bigint(20) NOT NULL,
+  `createdAt` bigint(20) NOT NULL,
+  `expiresAt` bigint(20) NOT NULL,
+  `updatedAt` bigint(20) NOT NULL,
+  `userId` bigint(20) NOT NULL,
+  `version` bigint(20) NOT NULL,
+  `authProviderId` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `authId` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `authToken` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `UNI_AUTH`(`authProviderId`, `authId`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for user
+-- ----------------------------
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user`  (
+  `tid` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `user_id` bigint(11) NOT NULL COMMENT '用户id',
+  `username` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '昵称',
+  `email` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '邮箱(登录名)',
+  `sex` char(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT 'M' COMMENT '用户性别',
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '头像',
+  `description` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '简单一句话，介绍你自己' COMMENT '简介',
+  `github` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'github',
+  `twitter` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'twitter',
+  `weibo` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'weibo',
+  PRIMARY KEY (`tid`) USING BTREE,
+  UNIQUE INDEX `uk_email`(`email`) USING BTREE,
+  UNIQUE INDEX `uk_user_id`(`user_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户基本信息表' ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;

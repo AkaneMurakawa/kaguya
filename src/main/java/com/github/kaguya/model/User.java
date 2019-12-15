@@ -9,7 +9,7 @@ public class User {
     /**
      * 主键
      */
-    private Long id;
+    private Long tid;
 
     /**
      * 用户id
