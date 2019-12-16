@@ -55,7 +55,7 @@ public class LoginPermissionAspect {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = requestAttributes.getRequest();
 
-        User loginUser = sessionCookieContainer.getLoginUser();
+        User loginUser = sessionCookieContainer.getLoginUser(request);
         if (null == loginUser){
             log.info("{} not login", request.getRemoteHost());
             return "redirect:/loginPage";

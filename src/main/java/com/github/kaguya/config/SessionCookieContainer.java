@@ -41,9 +41,9 @@ public class SessionCookieContainer {
      *
      * @return
      */
-    public User getLoginUser(HttpServletRequest request, HttpServletResponse response) {
-        String userId = getUserId(request, response);
-        return (User)redisDao.get(REDIS_EY_PREFIX + userId);
+    public User getLoginUser(HttpServletRequest request) {
+        String userId = getUserId(request);
+        return (User) redisDao.get(REDIS_EY_PREFIX + userId);
     }
 
     /**
@@ -100,9 +100,8 @@ public class SessionCookieContainer {
      * 获取SessionCookie的值
      *
      * @param request
-     * @param response
      */
-    public String getSessionCookieValue(HttpServletRequest request, HttpServletResponse response) {
+    public String getSessionCookieValue(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
             if (SESSION_COOKIE.equals(cookie.getName())) {
@@ -116,14 +115,16 @@ public class SessionCookieContainer {
      * 获取SessionCookie的值
      *
      * @param request
-     * @param response
      */
-    public String getUserId(HttpServletRequest request, HttpServletResponse response) {
-        String value = getSessionCookieValue(request, response);
+    public String getUserId(HttpServletRequest request) {
+        String value = getSessionCookieValue(request);
         if (StringUtils.isEmpty(value)) {
             return null;
         }
-        return value.split(DELIMITER)[1];
+        String userId = value.split(DELIMITER)[1];
+        // TODO
+        // 判断过期时间
+        return userId;
     }
 
     /**
@@ -181,11 +182,12 @@ public class SessionCookieContainer {
 
     /**
      * 清楚登录信息
+     *
      * @param request
      * @param response
      */
-    public void clear(HttpServletRequest request, HttpServletResponse response){
-        String userId = getUserId(request, response);
+    public void clear(HttpServletRequest request, HttpServletResponse response) {
+        String userId = getUserId(request);
         removeUser(userId);
         Cookie cookie = new Cookie(SESSION_COOKIE, null);
         cookie.setMaxAge(0);
