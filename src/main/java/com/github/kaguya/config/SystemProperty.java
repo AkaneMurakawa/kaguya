@@ -17,7 +17,7 @@ public class SystemProperty {
 
     @Value("${system.property.author:AkaneMurakawa}")
     public void setAuthor(String author) {
-        this.author = author;
+        SystemProperty.author = author;
     }
 
     private static String host;
@@ -28,6 +28,6 @@ public class SystemProperty {
 
     @Value("${system.property.host:localhost:9420}")
     public void setHost(String host) {
-        this.host = host;
+        SystemProperty.host = host;
     }
 }
