@@ -1,5 +1,6 @@
 package com.github.kaguya.service.impl;
 
+import com.github.kaguya.constant.CommonConstant;
 import com.github.kaguya.dao.RedisDao;
 import com.github.kaguya.dao.mapper.DocumentMapper;
 import com.github.kaguya.model.Document;
@@ -12,7 +13,7 @@ import java.util.Objects;
 @Service
 public class DocumentServiceImpl implements DocumentService {
 
-    private final static String KEY_PREFIX = "docs:content:";
+    private final static String KEY_PREFIX = CommonConstant.REDIS_KEY_PREFIX_KAGUYA_WEB + "docs:content:";
     private final static long EXPIRE = 3600 * 24L;
 
     @Resource

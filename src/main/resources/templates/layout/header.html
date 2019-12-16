@@ -17,7 +17,12 @@
                         {{category.name}}
                     </a>
                 </nav>
-                <a class="btn btn-outline-primary" href="/loginPage">登录</a>
+                <a class="btn btn-outline-primary" href="/loginPage" th:if="${session.user} == null">登录</a>
+
+                <a style="padding: .1rem .1rem" class="btn btn-outline-primary" href="/docs/addPage" th:if="${session.user}  != null">
+                    <img class="avatar" th:src="${session.user.avatar}" height="30" width="30">
+                    <span class="dropdown-caret"></span>
+                </a>
             </div>
         </div>
         <script th:src="@{/js/common/common.js}"></script>

@@ -1,5 +1,6 @@
 package com.github.kaguya.service.impl;
 
+import com.github.kaguya.constant.CommonConstant;
 import com.github.kaguya.dao.RedisDao;
 import com.github.kaguya.dao.mapper.CategoryMapper;
 import com.github.kaguya.exception.model.ResponseMsg;
@@ -14,7 +15,7 @@ import java.util.List;
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
-    private final static String KEY_PREFIX = "docs:categories:";
+    private final static String KEY_PREFIX = CommonConstant.REDIS_KEY_PREFIX_KAGUYA_WEB + "docs:categories:";
     private final static long EXPIRE = 3600 * 24L;
 
     @Resource

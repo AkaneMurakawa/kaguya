@@ -6,4 +6,6 @@ package com.github.kaguya.constant;
 public interface CommonConstant {
 
     Long DEFAULT_PARENT_ID = 0L;
+
+    String REDIS_KEY_PREFIX_KAGUYA_WEB = "kaguya:web:";
 }

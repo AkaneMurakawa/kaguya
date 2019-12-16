@@ -23,6 +23,8 @@ public class KaguyaApplicationTests {
     private UserMapper userMapper;
     @Resource
     private AdminOAuthMapper adminOAuthMapper;
+    @Resource
+    private SessionCookieContainer sessionCookieContainer;
 
     @Test
     public void category() {
@@ -64,13 +66,22 @@ public class KaguyaApplicationTests {
         user.setUserId(userId);
         user.setUsername("AkaneMurakwa");
         user.setEmail("chenshjing@gmail.com");
+        user.setAvatar(SecurityUtil.base64("https://avatars1.githubusercontent.com/u/23401691?s=460&v=4".getBytes()));
         userMapper.insert(user);
 
         AdminOAuth adminOAuth = new AdminOAuth();
         adminOAuth.setUserId(userId);
         adminOAuth.setSalt(SecurityUtil.sha256Hex(userId.toString()));
-        adminOAuth.setPassword(SessionCookieContainer.getPassword("123456", adminOAuth.getSalt()));
+        adminOAuth.setPassword(sessionCookieContainer.getPassword("123456", adminOAuth.getSalt()));
         adminOAuthMapper.insert(adminOAuth);
     }
 
+    @Test
+    public void base64() {
+        String encode = SecurityUtil.base64("https://avatars1.githubusercontent.com/u/23401691?s=460&v=4".getBytes());
+        byte[] decode = SecurityUtil.base64(encode);
+        System.out.println(encode);
+        System.out.println(new String(decode));
+
+    }
 }

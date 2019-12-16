@@ -24,7 +24,7 @@ import java.util.Objects;
 @Service
 public class DocumentGroupServiceImpl implements DocumentGroupService {
 
-    private final static String KEY_PREFIX = "docs:";
+    private final static String KEY_PREFIX = CommonConstant.REDIS_KEY_PREFIX_KAGUYA_WEB + "docs:";
     private final static long EXPIRE = 3600 * 24L;
     private final static Integer PARENT_ID = 0;
 

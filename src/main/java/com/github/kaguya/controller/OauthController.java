@@ -45,6 +45,8 @@ public class OauthController {
     private UserService userService;
     @Resource
     private AdminOAuthService adminOAuthService;
+    @Resource
+    private SessionCookieContainer sessionCookieContainer;
 
     /**
      * 获取系统支持的所有登录类型
@@ -112,14 +114,15 @@ public class OauthController {
         if (null == auth) {
             return buildFailResult(modelAndView);
         }
-        String inputPassword = SessionCookieContainer.getPassword(password, auth.getSalt());
+        String inputPassword = sessionCookieContainer.getPassword(password, auth.getSalt());
         if (!inputPassword.equals(auth.getPassword())) {
             return buildFailResult(modelAndView);
         }
 
         // session cookie
-        String cookieValue = SessionCookieContainer.setCookieValue(auth);
-        SessionCookieContainer.setSessionCookie(request, response, cookieValue, 0);
+        String cookieValue = sessionCookieContainer.setSessionCookieValue(auth);
+        sessionCookieContainer.setSessionCookie(request, response, cookieValue, 0);
+        sessionCookieContainer.setSession(request, response, user, 0);
         modelAndView.setViewName("/index");
         return modelAndView;
     }

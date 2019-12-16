@@ -1,6 +1,7 @@
 package com.github.kaguya.config;
 
 import com.github.kaguya.annotation.LoginPermission;
+import com.github.kaguya.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.Cookie;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -24,6 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 @Order
 @Slf4j
 public class LoginPermissionAspect {
+
+    @Resource
+    private SessionCookieContainer sessionCookieContainer;
 
     /**
      * 切入点
@@ -50,14 +54,13 @@ public class LoginPermissionAspect {
     public Object doAround(ProceedingJoinPoint joinPoint, LoginPermission loginPermission) throws Throwable {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = requestAttributes.getRequest();
-        Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if (SessionCookieContainer.getSessionCookie().equals(cookie.getName())) {
-                return joinPoint.proceed();
-            }
+
+        User loginUser = sessionCookieContainer.getLoginUser();
+        if (null == loginUser){
+            log.info("{} not login", request.getRemoteHost());
+            return "redirect:/loginPage";
         }
-        log.info("{} not login", request.getRemoteHost());
-        return "redirect:/loginPage";
+        return joinPoint.proceed();
     }
 
 }

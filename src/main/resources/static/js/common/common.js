@@ -19,7 +19,7 @@ var App = new Vue({
             $.ajax({
                 url: BASIC_URL + "/list",
                 type: "GET",
-                async: true,
+                async: false,
                 success : function (res) {
                     vm.categories = res.data || {};
                 },
