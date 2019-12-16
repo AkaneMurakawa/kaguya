@@ -126,4 +126,5 @@ public class OauthController {
         modelAndView.setViewName("/index");
         return modelAndView;
     }
+
 }
