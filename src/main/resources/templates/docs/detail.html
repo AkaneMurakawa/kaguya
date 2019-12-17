@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${doc.title}"></title>
+    <title>文档</title>
 </head>
 <body>
     <header th:replace="~{/layout/header :: header}"></header>
@@ -10,24 +10,20 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-2 col-md-2" style="border-right: 1px solid #ddddd8;">
-                <ul class="listingblock">
-                    <li >免费域名注册</li>
-                    <li >免费 Window 空间托管</li>
-                    <li >
+                <ul class="listingblock" th:each="docs : ${docsTree.groups}">
+                    <li>
+                        <a th:href="@{'/docs/' + ${docsTree.categoryName} + '/' + ${docs.categoryId} + '/' + ${docs.documentId}}" th:text="${docs.title}"></a>
+                    </li>
+                    <li th:each="doc : ${docs.children}">
                         <ul class="list-group">
-                            <li >免费域名注册</li>
-                            <li >免费 Window 空间托管</li>
-                            <li >图像的数量</li>
-                            <li >24*7 支持</li>
-                            <li >每年更新成本</li>
+                            <li>
+                                <a th:href="@{'/docs/' + ${docsTree.categoryName} + '/' + ${doc.categoryId} + '/' + ${doc.documentId}}" th:text="${doc.title}"></a>
                         </ul>
                     </li>
-                    <li >24*7 支持</li>
-                    <li >每年更新成本</li>
                 </ul>
             </div>
             <div class="col-sm-10 col-md-10">
-                <div th:text="${doc.content}"></div>
+                <div th:utext="${doc.content}"></div>
             </div>
         </div>
     </div>

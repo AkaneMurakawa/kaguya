@@ -14,5 +14,7 @@ public class DocumentTreeDTO implements Serializable {
      */
     private Long categoryId;
 
+    private String categoryName;
+
     List<DocumentGroup> groups;
 }

@@ -4,7 +4,7 @@
 
     <select id="getDocsParent" resultType="com.github.kaguya.model.DocumentGroup">
       SELECT
-        document_id, parent_id, order_id, title
+        document_id, parent_id, category_id, order_id, title
       FROM document_group
       WHERE
         category_id = #{categoryId}

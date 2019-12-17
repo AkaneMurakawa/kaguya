@@ -1,7 +1,5 @@
 package com.github.kaguya.controller;
 
-import com.github.kaguya.annotation.LoginPermission;
-import com.github.kaguya.exception.BusinessException;
 import com.github.kaguya.exception.model.ResponseMsg;
 import com.github.kaguya.model.Document;
 import com.github.kaguya.model.DocumentTreeDTO;
@@ -38,11 +36,13 @@ public class DocumentController {
 
         DocumentTreeDTO docsTree = documentGroupService.getDocsTree(categoryId);
         if (!Objects.isNull(docsTree)) {
+            docsTree.setCategoryName(categoryName);
+
             Long documentId = docsTree.getGroups().get(0).getDocumentId();
             Document doc = documentService.getDoc(documentId);
             modelAndView.addObject("doc", doc);
         } else {
-            throw new BusinessException(ResponseMsg.buildFailResult("category not found"));
+//            throw new BusinessException(ResponseMsg.buildFailResult("category not found"));
         }
         modelAndView.addObject("docsTree", docsTree);
         modelAndView.setViewName("docs/detail");
@@ -57,6 +57,7 @@ public class DocumentController {
         ModelAndView modelAndView = new ModelAndView();
 
         DocumentTreeDTO docsTree = documentGroupService.getDocsTree(categoryId);
+        docsTree.setCategoryName(categoryName);
         Document doc = documentService.getDoc(docId);
 
         modelAndView.addObject("docsTree", docsTree);

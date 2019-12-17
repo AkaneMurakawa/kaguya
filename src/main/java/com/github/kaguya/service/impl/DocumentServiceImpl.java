@@ -54,8 +54,8 @@ public class DocumentServiceImpl implements DocumentService {
             return document;
         }
         // TODO
-        String json = JsonUtils.toJSONString(object);
-        Document document = JsonUtils.parseObject(json, Document.class);
+        String json = JsonUtils.objectToJson(object);
+        Document document = JsonUtils.jsonToObject(json, Document.class);
         String contentHTML = getContentHTML(documentId);
         document.setContent(contentHTML);
         return document;
