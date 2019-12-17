@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * 登录注解处理器
+ *
  * @Aspect 切面
  * @Order 注解排序
  */
@@ -55,8 +56,7 @@ public class LoginPermissionAspect {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = requestAttributes.getRequest();
 
-        User loginUser = sessionCookieContainer.getLoginUser(request);
-        if (null == loginUser){
+        if (!sessionCookieContainer.isLogin(request)) {
             log.info("{} not login", request.getRemoteHost());
             return "redirect:/loginPage";
         }

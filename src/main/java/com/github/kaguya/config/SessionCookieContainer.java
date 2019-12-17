@@ -37,13 +37,33 @@ public class SessionCookieContainer {
     private RedisDao redisDao;
 
     /**
+     * 是否登录
+     *
+     * @param request
+     * @return true 是， false 否
+     */
+    public boolean isLogin(HttpServletRequest request) {
+        if (null == getUserId(request)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * 获取登录用户信息
      *
      * @return
      */
     public User getLoginUser(HttpServletRequest request) {
         String userId = getUserId(request);
-        return (User) redisDao.get(REDIS_EY_PREFIX + userId);
+        if (null == userId) {
+            return null;
+        }
+        User user = (User) redisDao.get(REDIS_EY_PREFIX + userId);
+        if (null == request.getSession().getAttribute(USER_SESSION)) {
+            setSession(request, USER_SESSION, user, 0);
+        }
+        return user;
     }
 
     /**
@@ -56,24 +76,6 @@ public class SessionCookieContainer {
      */
     public String getPassword(String password, String token) {
         return SecurityUtil.sha256Hex(PASSWORD_PREFIX + password + token);
-    }
-
-    /**
-     * 设置SessionCookie
-     *
-     * @param value    cookie值
-     * @param expiry   过期时间，单位秒。0表示使用默认
-     * @param request
-     * @param response
-     */
-    public void setSessionCookie(HttpServletRequest request, HttpServletResponse response, String value, int expiry) {
-        log.info("set session cookie:{}", value);
-        if (0 == expiry) {
-            expiry = COOKIE_EXPIRES_IN_SECONDS;
-        }
-        Cookie cookie = new Cookie(SESSION_COOKIE, value);
-        cookie.setMaxAge(expiry);
-        response.addCookie(cookie);
     }
 
     /**
@@ -97,6 +99,24 @@ public class SessionCookieContainer {
     }
 
     /**
+     * 设置SessionCookie
+     *
+     * @param value    cookie值
+     * @param expiry   过期时间，单位秒。0表示使用默认
+     * @param request
+     * @param response
+     */
+    public void setSessionCookie(HttpServletRequest request, HttpServletResponse response, String value, int expiry) {
+        log.info("set session cookie:{}", value);
+        if (0 == expiry) {
+            expiry = COOKIE_EXPIRES_IN_SECONDS;
+        }
+        Cookie cookie = new Cookie(SESSION_COOKIE, value);
+        cookie.setMaxAge(expiry);
+        response.addCookie(cookie);
+    }
+
+    /**
      * 获取SessionCookie的值
      *
      * @param request
@@ -108,11 +128,11 @@ public class SessionCookieContainer {
                 return SecurityUtil.base64Str(cookie.getValue());
             }
         }
-        return "";
+        return null;
     }
 
     /**
-     * 获取SessionCookie的值
+     * 获取userId，如果过期返回null
      *
      * @param request
      */
@@ -121,10 +141,12 @@ public class SessionCookieContainer {
         if (StringUtils.isEmpty(value)) {
             return null;
         }
-        String userId = value.split(DELIMITER)[1];
-        // TODO
-        // 判断过期时间
-        return userId;
+        // 判断是否过期
+        Long expire = Long.parseLong(value.split(DELIMITER)[2]);
+        if (System.currentTimeMillis() < expire) {
+            return null;
+        }
+        return value.split(DELIMITER)[1];
     }
 
     /**
@@ -143,7 +165,7 @@ public class SessionCookieContainer {
         User sessionUser = new User();
         sessionUser.setUsername(user.getUsername());
         sessionUser.setAvatar(SecurityUtil.base64Str(user.getAvatar()));
-        setSession(request, response, USER_SESSION, sessionUser, expiry);
+        setSession(request, USER_SESSION, sessionUser, expiry);
     }
 
     /**
@@ -168,12 +190,11 @@ public class SessionCookieContainer {
      * 存储用户信息到session
      *
      * @param request
-     * @param response
      * @param key
      * @param value
      * @param expiry
      */
-    private void setSession(HttpServletRequest request, HttpServletResponse response, String key, Object value, int expiry) {
+    private void setSession(HttpServletRequest request, String key, Object value, int expiry) {
         log.info("set session:{}", value);
         HttpSession session = request.getSession();
         session.setMaxInactiveInterval(expiry);
