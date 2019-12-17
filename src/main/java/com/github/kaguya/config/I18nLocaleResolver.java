@@ -1,7 +1,7 @@
 package com.github.kaguya.config;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.LocaleResolver;
-import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +20,7 @@ public class I18nLocaleResolver implements LocaleResolver {
         HttpSession session = request.getSession();
         String lang = (String) session.getAttribute(SESSION_LAN);
         Locale locale = Locale.getDefault();
-        if (!StringUtils.isEmpty(lang)) {
+        if (StringUtils.isNotEmpty(lang)) {
             String[] split = lang.split("_");
             try {
                 locale = new Locale(split[0], split[1]);

@@ -30,11 +30,8 @@ public class DocumentController {
 
     /**
      * 访问分类
-     *
-     * @param categoryId
-     * @return
      */
-    @GetMapping(DOC_NAME + "/" + CATEGORY_ID)
+    @GetMapping(CATEGORY_ID)
     public ModelAndView getCategory(@PathVariable("categoryId") Long categoryId) {
         ModelAndView modelAndView = new ModelAndView();
 
@@ -53,11 +50,8 @@ public class DocumentController {
 
     /**
      * 访问文档内容
-     *
-     * @param categoryId
-     * @return
      */
-    @GetMapping(DOC_NAME + "/" + CATEGORY_ID + "/" + DOC_ID)
+    @GetMapping(CATEGORY_ID + "/" + DOC_ID)
     public ModelAndView docs(@PathVariable("categoryId") Long categoryId, @PathVariable("docId") Long docId) {
         ModelAndView modelAndView = new ModelAndView();
 
@@ -70,19 +64,28 @@ public class DocumentController {
         return modelAndView;
     }
 
-    @RequestMapping("addPage")
+    /**
+     * 跳转到新建文档页面
+     */
     @LoginPermission
+    @RequestMapping("addPage")
     public String addPage() {
         return "docs/addPage";
     }
 
-    @PostMapping("add")
+    /**
+     * 新建文档
+     */
     @ResponseBody
     @LoginPermission
+    @PostMapping("add")
     public ResponseMsg add(@RequestBody DocumentVO documentVO) {
         return documentGroupService.add(documentVO);
     }
 
+    /**
+     * 获取分类id下的所有标题
+     */
     @ResponseBody
     @GetMapping("getParentsId/" + CATEGORY_ID)
     public ResponseMsg getParentsId(@PathVariable("categoryId") Long categoryId) {

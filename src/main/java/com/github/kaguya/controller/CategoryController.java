@@ -14,12 +14,18 @@ public class CategoryController {
     @Resource
     private CategoryService categoryService;
 
+    /**
+     * 新增分类
+     */
     @PostMapping("add")
     @ResponseBody
     public ResponseMsg add(@RequestParam String name) {
         return categoryService.add(name);
     }
 
+    /**
+     * 查询所有分类
+     */
     @ResponseBody
     @GetMapping("list")
     public ResponseMsg list() {

@@ -27,6 +27,9 @@ public class SystemController {
         return "login";
     }
 
+    /**
+     * 退出系统
+     */
     @RequestMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response){
         sessionCookieContainer.clear(request, response);

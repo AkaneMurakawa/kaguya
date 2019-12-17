@@ -47,6 +47,7 @@ public class SecurityUtil {
     public static byte[] base64(String key) {
         return BaseEncoding.base64().decode(key);
     }
+
     public static String base64Str(String key) {
         return new String(BaseEncoding.base64().decode(key));
     }

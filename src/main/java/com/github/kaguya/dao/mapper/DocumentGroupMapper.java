@@ -21,17 +21,11 @@ public interface DocumentGroupMapper extends BaseMapper<DocumentGroup> {
 
     /**
      * 获取该分类id下的所有标题
-     *
-     * @param categoryId
-     * @return
      */
     List<DocumentGroup> getParents(@Param("categoryId") Long categoryId);
 
     /**
      * 获得分类id下最大的orderId
-     *
-     * @param categoryId
-     * @return
      */
     Integer getMaxOrderIdBy(@Param("categoryId") Long categoryId, @Param("parentId") Long parentId);
 }

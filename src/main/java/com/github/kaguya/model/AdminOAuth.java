@@ -13,12 +13,10 @@ public class AdminOAuth implements Serializable {
      * 主键
      */
     private Long tid;
-
     /**
      * 用户id
      */
     private Long userId;
-
     /**
      * 盐值
      */

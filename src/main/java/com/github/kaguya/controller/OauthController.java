@@ -83,6 +83,9 @@ public class OauthController {
         return response;
     }
 
+    /**
+     * 验证登录类型
+     */
     private AuthSource getAuthSource(String type) {
         if (StrUtil.isNotBlank(type)) {
             return AuthSource.valueOf(type.toUpperCase());
@@ -91,6 +94,9 @@ public class OauthController {
         }
     }
 
+    /**
+     * 认证失败处理
+     */
     private ModelAndView buildFailResult(ModelAndView modelAndView) {
         modelAndView.addObject("result", ResponseMsg.buildFailResult("认证失败"));
         modelAndView.setViewName("/result");
