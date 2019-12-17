@@ -49,6 +49,8 @@ public class DocumentServiceImpl implements DocumentService {
             String contentHTML = getContentHTML(documentId);
             if (StringUtils.isEmpty(contentHTML)){
                 contentHTML = MarkdownUtil.MarkdownToHtml(tempContent);
+                // 将HTML缓存到redis
+                redisDao.set(KEY_PREFIX + "html:" + documentId, contentHTML);
             }
             document.setContent(contentHTML);
             return document;
