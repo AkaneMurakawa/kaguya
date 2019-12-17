@@ -9,6 +9,8 @@ import java.io.Serializable;
 @Accessors(chain = true)
 public class Oauth implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     public long userId;
 
     public String authProviderId;

@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface DocumentGroupService {
 
-    DocumentTreeDTO getDocsTree(Long documentId);
+    DocumentTreeDTO getDocsTree(Long categoryId);
 
     List<DocumentGroup> getParents(Long categoryId);
 

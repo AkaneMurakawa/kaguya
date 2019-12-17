@@ -116,6 +116,7 @@ var App = new Vue({
                 async: false,
                 success : function (res) {
                     alert(res.msg);
+                    window.location.reload();
                     $("#submit").attr("disabled", false);
                 },
                 error: function() {

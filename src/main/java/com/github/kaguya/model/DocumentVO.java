@@ -6,6 +6,8 @@ import java.io.Serializable;
 
 @Data
 public class DocumentVO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     /**
      * 父类id
      */

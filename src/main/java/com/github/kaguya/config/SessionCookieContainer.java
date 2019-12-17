@@ -86,7 +86,7 @@ public class SessionCookieContainer {
                 .append(DELIMITER)
                 .append(auth.getUserId())
                 .append(DELIMITER)
-                .append(COOKIE_EXPIRES_IN_MILLIS)
+                .append(System.currentTimeMillis() + COOKIE_EXPIRES_IN_MILLIS)
                 .append(DELIMITER)
                 .append(auth.getSalt())
                 .toString();
@@ -127,7 +127,7 @@ public class SessionCookieContainer {
      */
     public String getUserId(HttpServletRequest request) {
         String value = getSessionCookieValue(request);
-        if (StringUtils.isEmpty(value)) {
+        if (null == value) {
             return null;
         }
         // 判断是否过期
@@ -198,9 +198,12 @@ public class SessionCookieContainer {
      */
     public void clear(HttpServletRequest request, HttpServletResponse response) {
         String userId = getUserId(request);
-        removeUser(userId);
-        Cookie cookie = new Cookie(SESSION_COOKIE, null);
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
+        if (userId != null) {
+            removeUser(userId);
+            Cookie cookie = new Cookie(SESSION_COOKIE, null);
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+        }
+        request.getSession().removeAttribute(USER_SESSION);
     }
 }

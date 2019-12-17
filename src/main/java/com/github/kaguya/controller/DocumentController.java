@@ -21,7 +21,8 @@ public class DocumentController {
 
     protected static final String CATEGORY_ID = "{categoryId:[0-9]{1,17}}";
     protected static final String DOC_ID = "/{docId:[0-9]{1,17}}";
-    protected static final String DOC_NAME = "/{docName}";
+    protected static final String CATEGORY_NAME = "{categoryName}";
+    protected static final String DELIMITE = "/";
 
     @Resource
     private DocumentGroupService documentGroupService;
@@ -31,8 +32,8 @@ public class DocumentController {
     /**
      * 访问分类
      */
-    @GetMapping(CATEGORY_ID)
-    public ModelAndView getCategory(@PathVariable("categoryId") Long categoryId) {
+    @GetMapping(CATEGORY_NAME + DELIMITE + CATEGORY_ID)
+    public ModelAndView getCategory(@PathVariable("categoryName") String categoryName, @PathVariable("categoryId") Long categoryId) {
         ModelAndView modelAndView = new ModelAndView();
 
         DocumentTreeDTO docsTree = documentGroupService.getDocsTree(categoryId);
@@ -51,8 +52,8 @@ public class DocumentController {
     /**
      * 访问文档内容
      */
-    @GetMapping(CATEGORY_ID + "/" + DOC_ID)
-    public ModelAndView docs(@PathVariable("categoryId") Long categoryId, @PathVariable("docId") Long docId) {
+    @GetMapping(CATEGORY_NAME + DELIMITE + CATEGORY_ID + DELIMITE + DOC_ID)
+    public ModelAndView docs(@PathVariable("categoryName") String categoryName, @PathVariable("categoryId") Long categoryId, @PathVariable("docId") Long docId) {
         ModelAndView modelAndView = new ModelAndView();
 
         DocumentTreeDTO docsTree = documentGroupService.getDocsTree(categoryId);
@@ -67,7 +68,7 @@ public class DocumentController {
     /**
      * 跳转到新建文档页面
      */
-    @LoginPermission
+//    @LoginPermission
     @RequestMapping("addPage")
     public String addPage() {
         return "docs/addPage";
@@ -77,7 +78,7 @@ public class DocumentController {
      * 新建文档
      */
     @ResponseBody
-    @LoginPermission
+//    @LoginPermission
     @PostMapping("add")
     public ResponseMsg add(@RequestBody DocumentVO documentVO) {
         return documentGroupService.add(documentVO);
