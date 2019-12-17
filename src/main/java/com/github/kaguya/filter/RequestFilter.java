@@ -8,7 +8,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-@WebFilter(filterName = "requestFilter", urlPatterns = "/*")
+@WebFilter(filterName = "requestFilter", urlPatterns = {"/*"})
 public class RequestFilter implements Filter {
 
     @Resource
@@ -22,7 +22,7 @@ public class RequestFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        if (null == sessionCookieContainer.getUserSession(request)){
+        if (null == sessionCookieContainer.getUserSession(request)) {
             sessionCookieContainer.setSession(request);
         }
         filterChain.doFilter(servletRequest, servletResponse);
