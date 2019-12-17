@@ -37,9 +37,8 @@ public class SessionCookieContainer {
     private RedisDao redisDao;
 
     /**
-     * 是否登录
+     * 是否登录，依赖cookie
      *
-     * @param request
      * @return true 是， false 否
      */
     public boolean isLogin(HttpServletRequest request) {
@@ -51,16 +50,15 @@ public class SessionCookieContainer {
 
     /**
      * 获取登录用户信息
-     *
-     * @return
      */
     public User getLoginUser(HttpServletRequest request) {
         String userId = getUserId(request);
         if (null == userId) {
             return null;
         }
-        User user = (User) redisDao.get(REDIS_EY_PREFIX + userId);
+        User user = null;
         if (null == request.getSession().getAttribute(USER_SESSION)) {
+            user = (User) redisDao.get(REDIS_EY_PREFIX + userId);
             setSession(request, USER_SESSION, user, 0);
         }
         return user;
@@ -70,9 +68,8 @@ public class SessionCookieContainer {
      * 认证密码
      * prefix + password + token
      *
-     * @param password
-     * @param token
-     * @return
+     * @param password 密码
+     * @param token    盐值
      */
     public String getPassword(String password, String token) {
         return SecurityUtil.sha256Hex(PASSWORD_PREFIX + password + token);
@@ -82,8 +79,6 @@ public class SessionCookieContainer {
      * 设置SessionCookie-value
      * role:userId:过期时间:token(salt)
      * base64加密
-     *
-     * @return
      */
     public String setSessionCookieValue(AdminOAuth auth) {
         String cookieValue = new StringBuffer(128)
@@ -101,10 +96,8 @@ public class SessionCookieContainer {
     /**
      * 设置SessionCookie
      *
-     * @param value    cookie值
-     * @param expiry   过期时间，单位秒。0表示使用默认
-     * @param request
-     * @param response
+     * @param value  cookie值
+     * @param expiry 过期时间，单位秒。0表示使用默认
      */
     public void setSessionCookie(HttpServletRequest request, HttpServletResponse response, String value, int expiry) {
         log.info("set session cookie:{}", value);
@@ -118,8 +111,6 @@ public class SessionCookieContainer {
 
     /**
      * 获取SessionCookie的值
-     *
-     * @param request
      */
     public String getSessionCookieValue(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
@@ -133,8 +124,6 @@ public class SessionCookieContainer {
 
     /**
      * 获取userId，如果过期返回null
-     *
-     * @param request
      */
     public String getUserId(HttpServletRequest request) {
         String value = getSessionCookieValue(request);
@@ -150,18 +139,20 @@ public class SessionCookieContainer {
     }
 
     /**
-     * 设置Cookie
+     * 设置session
+     */
+    public void setSession(HttpServletRequest request) {
+        getLoginUser(request);
+    }
+
+    /**
+     * 设置session
      *
-     * @param expiry   过期时间，单位秒。0表示使用默认
-     * @param request
-     * @param response
+     * @param expiry 过期时间，单位秒。0表示使用默认
      */
     public void setSession(HttpServletRequest request, HttpServletResponse response, User user, int expiry) {
         saveUser(user);
 
-        if (0 == expiry) {
-            expiry = SESSION_EXPIRES_IN_SECONDS;
-        }
         User sessionUser = new User();
         sessionUser.setUsername(user.getUsername());
         sessionUser.setAvatar(SecurityUtil.base64Str(user.getAvatar()));
@@ -169,9 +160,27 @@ public class SessionCookieContainer {
     }
 
     /**
+     * 存储用户信息到session
+     */
+    private void setSession(HttpServletRequest request, String key, Object value, int expiry) {
+        log.info("set session:{}", value);
+        if (0 == expiry) {
+            expiry = SESSION_EXPIRES_IN_SECONDS;
+        }
+        HttpSession session = request.getSession();
+        session.setMaxInactiveInterval(expiry);
+        session.setAttribute(key, value);
+    }
+
+    /**
+     * 获取用户session
+     */
+    public Object getUserSession(HttpServletRequest request) {
+        return request.getSession().getAttribute(USER_SESSION);
+    }
+
+    /**
      * 存储用户信息到redis
-     *
-     * @param user
      */
     private void saveUser(User user) {
         redisDao.set(REDIS_EY_PREFIX + user.getUserId(), user, REDIS_EXPIRE);
@@ -179,33 +188,13 @@ public class SessionCookieContainer {
 
     /**
      * 删除用户
-     *
-     * @param userId
      */
     private void removeUser(String userId) {
         redisDao.del(REDIS_EY_PREFIX + userId);
     }
 
     /**
-     * 存储用户信息到session
-     *
-     * @param request
-     * @param key
-     * @param value
-     * @param expiry
-     */
-    private void setSession(HttpServletRequest request, String key, Object value, int expiry) {
-        log.info("set session:{}", value);
-        HttpSession session = request.getSession();
-        session.setMaxInactiveInterval(expiry);
-        session.setAttribute(key, value);
-    }
-
-    /**
-     * 清楚登录信息
-     *
-     * @param request
-     * @param response
+     * 清除登录信息
      */
     public void clear(HttpServletRequest request, HttpServletResponse response) {
         String userId = getUserId(request);

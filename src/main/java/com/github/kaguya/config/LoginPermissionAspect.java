@@ -48,8 +48,6 @@ public class LoginPermissionAspect {
      *
      * @param joinPoint       连接点，可以获得请求的相关信息
      * @param loginPermission 可以获得注解参数上的内容
-     * @return
-     * @throws Throwable
      */
     @Around("signature() && @annotation(loginPermission)")
     public Object doAround(ProceedingJoinPoint joinPoint, LoginPermission loginPermission) throws Throwable {
