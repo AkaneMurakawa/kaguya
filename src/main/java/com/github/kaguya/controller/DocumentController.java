@@ -35,14 +35,13 @@ public class DocumentController {
         ModelAndView modelAndView = new ModelAndView();
 
         DocumentTreeDTO docsTree = documentGroupService.getDocsTree(categoryId);
-        if (!Objects.isNull(docsTree)) {
+        // 访问分类时的默认文档
+        if (docsTree != null) {
             docsTree.setCategoryName(categoryName);
 
             Long documentId = docsTree.getGroups().get(0).getDocumentId();
             Document doc = documentService.getDoc(documentId);
             modelAndView.addObject("doc", doc);
-        } else {
-//            throw new BusinessException(ResponseMsg.buildFailResult("category not found"));
         }
         modelAndView.addObject("docsTree", docsTree);
         modelAndView.setViewName("docs/detail");
@@ -50,7 +49,7 @@ public class DocumentController {
     }
 
     /**
-     * 访问文档内容
+     * 访问文档内容，逻辑同上
      */
     @GetMapping(CATEGORY_NAME + DELIMITE + CATEGORY_ID + DELIMITE + DOC_ID)
     public ModelAndView docs(@PathVariable("categoryName") String categoryName, @PathVariable("categoryId") Long categoryId, @PathVariable("docId") Long docId) {

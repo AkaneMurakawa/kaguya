@@ -33,7 +33,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-2">
                             <div>
                                 <span>选择分类：</span>
                                 <select v-model.number="document.categoryId" name="categoryId" id="categoryId">
@@ -46,8 +46,11 @@
                             <div>
                                 <span>选择章节：</span>
                                 <select  v-model.number="document.parentId" name="parentId">
-                                    <option value="0" selected>请选择</option>
-                                    <option v-for="parent in parents" :value="parent.documentId">{{parent.title}}</option>
+                                    <option value="">请选择</option>
+                                    <option v-for="parent in parents" :value="parent.documentId">
+                                        {{(parent.title).substring(0, 10)}}
+                                        {{(parent.title.length > 10) ? '...' : ''}}
+                                    </option>
                                 </select>
                             </div>
                         </div>

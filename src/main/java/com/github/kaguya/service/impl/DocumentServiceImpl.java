@@ -26,9 +26,6 @@ public class DocumentServiceImpl implements DocumentService {
 
     /**
      * 获得文档的内容
-     *
-     * @param documentId
-     * @return
      */
     @Override
     public Document getDoc(Long documentId) {
@@ -47,7 +44,7 @@ public class DocumentServiceImpl implements DocumentService {
 
             // 设置content
             String contentHTML = getContentHTML(documentId);
-            if (StringUtils.isEmpty(contentHTML)){
+            if (StringUtils.isEmpty(contentHTML)) {
                 contentHTML = MarkdownUtil.MarkdownToHtml(tempContent);
                 // 将HTML缓存到redis
                 redisDao.set(KEY_PREFIX + "html:" + documentId, contentHTML);
@@ -55,7 +52,6 @@ public class DocumentServiceImpl implements DocumentService {
             document.setContent(contentHTML);
             return document;
         }
-        // TODO
         String json = JsonUtils.objectToJson(object);
         Document document = JsonUtils.jsonToObject(json, Document.class);
         String contentHTML = getContentHTML(documentId);
@@ -63,7 +59,7 @@ public class DocumentServiceImpl implements DocumentService {
         return document;
     }
 
-    public String getContentHTML(Long documentId){
-        return (String)redisDao.get(KEY_PREFIX + "html:" + documentId);
+    public String getContentHTML(Long documentId) {
+        return (String) redisDao.get(KEY_PREFIX + "html:" + documentId);
     }
 }

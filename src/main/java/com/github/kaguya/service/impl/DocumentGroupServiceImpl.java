@@ -1,6 +1,5 @@
 package com.github.kaguya.service.impl;
 
-import com.alibaba.fastjson.TypeReference;
 import com.github.kaguya.config.SystemProperty;
 import com.github.kaguya.constant.CommonConstant;
 import com.github.kaguya.dao.RedisDao;
@@ -15,6 +14,7 @@ import com.github.kaguya.service.DocumentGroupService;
 import com.github.kaguya.util.JsonUtils;
 import com.github.kaguya.util.SnowFlake;
 import lombok.Synchronized;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@Slf4j
 public class DocumentGroupServiceImpl implements DocumentGroupService {
 
     private final static String KEY_PREFIX = CommonConstant.REDIS_KEY_PREFIX_KAGUYA_WEB + "docs:";
@@ -60,9 +61,6 @@ public class DocumentGroupServiceImpl implements DocumentGroupService {
 
     /**
      * 遍历树形文档
-     *
-     * @param root
-     * @return
      */
     private List<DocumentGroup> getDocsGroup(List<DocumentGroup> root) {
         for (DocumentGroup children : root) {
@@ -79,9 +77,6 @@ public class DocumentGroupServiceImpl implements DocumentGroupService {
 
     /**
      * 获得父类id
-     *
-     * @param categoryId
-     * @return
      */
     @Override
     public List<DocumentGroup> getParents(Long categoryId) {
@@ -89,11 +84,7 @@ public class DocumentGroupServiceImpl implements DocumentGroupService {
     }
 
     /**
-     * 获取下一个orderId
-     *
-     * @param categoryId
-     * @param parentId
-     * @return
+     * 获取分类下当前父类下的下一个orderId
      */
     public Integer getNextOrderId(Long categoryId, Long parentId) {
         // 获取最大的orderId
@@ -108,13 +99,10 @@ public class DocumentGroupServiceImpl implements DocumentGroupService {
 
     /**
      * 新增文档
-     *
-     * @param documentVO
-     * @return
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     @Synchronized
+    @Transactional(rollbackFor = Exception.class)
     public ResponseMsg add(DocumentVO documentVO) {
         // 设置默认的父类ID
         if (null == documentVO.getParentId()) {
@@ -139,6 +127,7 @@ public class DocumentGroupServiceImpl implements DocumentGroupService {
         int result2 = documentMapper.insert(document);
 
         if (result1 < 0 || result2 < 0) {
+            log.error("新增文档失败，categoryId:{}, parentId:{}", documentVO.getCategoryId(), documentVO.getParentId());
             return ResponseMsg.buildFailResult();
         }
         // 将HTML缓存到redis
