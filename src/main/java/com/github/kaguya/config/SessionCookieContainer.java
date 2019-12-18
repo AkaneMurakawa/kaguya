@@ -80,14 +80,23 @@ public class SessionCookieContainer {
      * base64加密
      */
     public String setSessionCookieValue(AdminOAuth auth) {
+        return setSessionCookieValue(auth.getUserId(), auth.getSalt());
+    }
+
+    /**
+     * 设置SessionCookie-value
+     * role:userId:过期时间:token(salt)
+     * base64加密
+     */
+    public String setSessionCookieValue(Long userId, String token) {
         String cookieValue = new StringBuffer(128)
                 .append(ROLE_ADMIN)
                 .append(DELIMITER)
-                .append(auth.getUserId())
+                .append(userId)
                 .append(DELIMITER)
                 .append(System.currentTimeMillis() + COOKIE_EXPIRES_IN_MILLIS)
                 .append(DELIMITER)
-                .append(auth.getSalt())
+                .append(token)
                 .toString();
         return SecurityUtil.base64(cookieValue.getBytes());
     }

@@ -10,6 +10,7 @@ import com.github.kaguya.model.AdminOAuth;
 import com.github.kaguya.model.User;
 import com.github.kaguya.service.AdminOAuthService;
 import com.github.kaguya.service.UserService;
+import com.github.kaguya.util.SecurityUtil;
 import com.xkcoding.justauth.AuthRequestFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +42,7 @@ public class OauthController {
 
     private final AuthRequestFactory factory;
     private static final String PREFIX = "/oauth";
+    private static final int SUCCESS_CODE = 2000;
 
     @Resource
     private UserService userService;
@@ -74,31 +76,40 @@ public class OauthController {
      *
      * @param oauthType 第三方登录类型
      * @param callback  携带返回的信息
-     * @return 登录成功后的信息
      */
     @RequestMapping("/")
     public ModelAndView login(AuthCallback callback, HttpServletRequest request, HttpServletResponse response) {
         ModelAndView modelAndView = new ModelAndView();
+        // 未登录时的跳转
+        if (null == callback.getAuth_code()){
+            modelAndView.setViewName("/index");
+            return modelAndView;
+        }
         // TODO authType
         AuthRequest authRequest = factory.get(getAuthSource("GITHUB"));
         AuthResponse authResponse = authRequest.login(callback);
         log.info("[response] = {}", JSONUtil.toJsonStr(response));
 
+        // 获取第三方返回登录成功的信息
         AuthUser user = (AuthUser) authResponse.getData();
         String email = user.getEmail();
-        if (!SystemProperty.getEmail().equals(email)){
+        if (SUCCESS_CODE != authResponse.getCode() || !SystemProperty.getEmail().equals(email)){
             return buildFailResult(modelAndView);
         }
 
+        // 第三方数据
         String username = user.getUsername();
         String avatar = user.getAvatar();
+        Long userId = Long.parseLong(user.getUuid());
+        String token = user.getToken().getAccessToken();
 
-        User sessionUser = new User();
+        User sessionUser = new User()
+                .setUsername(username)
+                .setAvatar(SecurityUtil.base64(avatar.getBytes()));
         // session cookie
-        String cookieValue = sessionCookieContainer.setSessionCookieValue(auth);
+        String cookieValue = sessionCookieContainer.setSessionCookieValue(userId, token);
         sessionCookieContainer.setSessionCookie(request, response, cookieValue, 0);
-        sessionCookieContainer.setSession(request, user, 0);
-        sessionCookieContainer.setSession(request, user, 0);
+        sessionCookieContainer.setSession(request, sessionUser, 0);
         modelAndView.setViewName("/index");
         return modelAndView;
     }
