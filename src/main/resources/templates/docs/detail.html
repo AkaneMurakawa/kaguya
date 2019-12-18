@@ -3,27 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <title>文档</title>
+    <link rel="stylesheet" th:href="@{/css/docs/detail.css}">
 </head>
 <body>
     <header th:replace="~{/layout/header :: header}"></header>
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-2 col-md-2" style="border-right: 1px solid #ddddd8;">
-                <ul class="listingblock" th:each="docs : ${docsTree.groups}">
+            <div class="col-sm-4 col-md-3" style="border-right: 1px solid #ddddd8;">
+                <ul class="listingblock" th:each="doc1 : ${docsTree.groups}">
                     <li>
-                        <a th:href="@{'/docs/' + ${docsTree.categoryName} + '/' + ${docs.categoryId} + '/' + ${docs.documentId}}" th:text="${docs.title}"></a>
+                        <a th:href="@{'/docs/' + ${docsTree.categoryName} + '/' + ${doc1.categoryId} + '/' + ${doc1.documentId}}" th:text="${doc1.title}"></a>
                     </li>
-                    <li th:each="doc : ${docs.children}">
+                    <li th:each="doc2 : ${doc1.children}">
                         <ul class="list-group">
                             <li>
-                                <a th:href="@{'/docs/' + ${docsTree.categoryName} + '/' + ${doc.categoryId} + '/' + ${doc.documentId}}" th:text="${doc.title}"></a>
+                                <a th:href="@{'/docs/' + ${docsTree.categoryName} + '/' + ${doc2.categoryId} + '/' + ${doc2.documentId}}" th:text="${doc2.title}"></a>
+                            </li>
+                            <li th:each="doc3 : ${doc2.children}">
+                                <ul class="list-group">
+                                    <li>
+                                        <a th:href="@{'/docs/' + ${docsTree.categoryName} + '/' + ${doc3.categoryId} + '/' + ${doc3.documentId}}" th:text="${doc3.title}"></a>
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
                     </li>
                 </ul>
             </div>
-            <div class="col-sm-10 col-md-10">
-                <div th:utext="${doc.content}"></div>
+            <div class="col-sm-8 col-md-8">
+                <div class="doc-content">
+                    <div th:utext="${doc.content}"></div>
+                </div>
             </div>
         </div>
     </div>

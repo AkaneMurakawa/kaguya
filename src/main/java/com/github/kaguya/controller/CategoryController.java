@@ -2,6 +2,7 @@ package com.github.kaguya.controller;
 
 import com.github.kaguya.exception.model.ResponseMsg;
 import com.github.kaguya.service.CategoryService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,9 +18,12 @@ public class CategoryController {
     /**
      * 新增分类
      */
-    @PostMapping("add")
     @ResponseBody
-    public ResponseMsg add(@RequestParam String name) {
+    @PostMapping("add")
+    public ResponseMsg add(@RequestParam(value = "name") String name) {
+        if (StringUtils.isEmpty(name)){
+            return ResponseMsg.buildFailResult("该项不能为空");
+        }
         return categoryService.add(name);
     }
 

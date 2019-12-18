@@ -133,6 +133,9 @@ public class DocumentGroupServiceImpl implements DocumentGroupService {
         // 将HTML缓存到redis
         String key = KEY_PREFIX + "html:" + documentId;
         redisDao.set(key, documentVO.getContentHTML());
+
+        // 清除doc tree的redis缓存
+        redisDao.del(KEY_PREFIX + "tree:" + documentVO.getCategoryId());
         return ResponseMsg.buildSuccessResult();
     }
 }

@@ -32,7 +32,9 @@ public class DocumentServiceImpl implements DocumentService {
         String tempContent = "";
         String key = KEY_PREFIX + "content:" + documentId;
         Object object = redisDao.get(key);
-        if (Objects.isNull(object)) {
+
+        String contentHTML = getContentHTML(documentId);
+        if (Objects.isNull(object) || StringUtils.isEmpty(contentHTML)) {
             Document document = new Document();
             document.setDocumentId(documentId);
             document = documentMapper.selectOne(document);
@@ -43,7 +45,6 @@ public class DocumentServiceImpl implements DocumentService {
             redisDao.set(key, document, EXPIRE);
 
             // 设置content
-            String contentHTML = getContentHTML(documentId);
             if (StringUtils.isEmpty(contentHTML)) {
                 contentHTML = MarkdownUtil.MarkdownToHtml(tempContent);
                 // 将HTML缓存到redis
@@ -54,8 +55,8 @@ public class DocumentServiceImpl implements DocumentService {
         }
         String json = JsonUtils.objectToJson(object);
         Document document = JsonUtils.jsonToObject(json, Document.class);
-        String contentHTML = getContentHTML(documentId);
-        document.setContent(contentHTML);
+
+
         return document;
     }
 

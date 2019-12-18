@@ -4,7 +4,8 @@ var App = new Vue({
     el: '.content-wrapper',
     data: function(){
         return{
-            categories: []
+            categories: [],
+            name: ''
         }
     },
     created : function(){
@@ -25,8 +26,29 @@ var App = new Vue({
                 },
                 error: function() {
                     console.log("error");
-                },
+                }
             });
         },
+        addCategory: function () {
+            var vm = this;
+            var name = vm.name;
+            if (name === ''){
+                alert("该项不能为空");
+                return;
+            }
+            $.ajax({
+                url: BASIC_URL + "/add",
+                type: "POST",
+                data: {"name": name},
+                async: false,
+                success : function (res) {
+                    alert(res.msg);
+                    window.location.reload();
+                },
+                error: function() {
+                    console.log("error");
+                }
+            });
+        }
     }
 });

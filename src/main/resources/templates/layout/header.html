@@ -19,24 +19,32 @@
             }
 
         </style>
-        <!-- 模态框（Modal） -->
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">新建分类</h4>
-                    </div>
-                    <input type="text" id="title" name="title" class="form-control" placeholder="title" autofocus>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                        <button type="button" class="btn btn-primary">保存</button>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal -->
-        </div>
 
         <div class="content-wrapper">
+            <!-- 模态框（Modal） -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog  modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel">新建分类</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">名称</label>
+                                    <input type="text" class="form-control" v-model="name" name="name" id="recipient-name" autofocus>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-primary" @click.stop="addCategory">保存</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal -->
+            </div>
+
             <div class="d-flex flex-column flex-md-row align-items-center p-4 px-md-4 mb-3 bg-white border-bottom shadow-sm">
                 <h4 class="my-0 mr-md-auto" style="color: #3090e4;">
                     <a href="/" class="text-decoration-none">Kaguya by akane</a>
@@ -63,9 +71,8 @@
                             <a class="text-decoration-none" role="menuitem" tabindex="-1" href="/docs/addPage">新建文档</a>
                         </li>
                         <li role="presentation">
-                            <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">新建分类</button>
                             <!-- 模态框（Modal） -->
-                            <a class="text-decoration-none" id="myModal" role="menuitem" tabindex="-1"  >新建分类</a>
+                            <a style="cursor:pointer;" class="text-decoration-none" data-toggle="modal" data-target="#myModal" role="menuitem" tabindex="-1"  >新建分类</a>
                         </li>
                         <li role="presentation">
                             <a class="text-decoration-none" role="menuitem" tabindex="-1" href="/logout">退出</a>
