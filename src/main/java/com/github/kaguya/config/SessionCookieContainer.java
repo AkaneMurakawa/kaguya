@@ -7,7 +7,6 @@ import com.github.kaguya.model.User;
 import com.github.kaguya.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.thymeleaf.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
@@ -150,7 +149,7 @@ public class SessionCookieContainer {
      *
      * @param expiry 过期时间，单位秒。0表示使用默认
      */
-    public void setSession(HttpServletRequest request, HttpServletResponse response, User user, int expiry) {
+    public void setSession(HttpServletRequest request, User user, int expiry) {
         saveUser(user);
 
         User sessionUser = new User();

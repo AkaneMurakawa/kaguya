@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.zhyd.oauth.config.AuthSource;
 import me.zhyd.oauth.model.AuthCallback;
 import me.zhyd.oauth.model.AuthResponse;
+import me.zhyd.oauth.model.AuthUser;
 import me.zhyd.oauth.request.AuthRequest;
 import me.zhyd.oauth.utils.AuthStateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +36,11 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @RestController
-@RequestMapping("/oauth")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class OauthController {
 
     private final AuthRequestFactory factory;
+    private static final String PREFIX = "/oauth";
 
     @Resource
     private UserService userService;
@@ -62,7 +63,7 @@ public class OauthController {
     /**
      * 第三方登录
      */
-    @RequestMapping("/login/{oauthType}")
+    @RequestMapping(PREFIX + "/login/{oauthType}")
     public void renderAuth(@PathVariable String oauthType, HttpServletResponse response) throws IOException {
         AuthRequest authRequest = factory.get(getAuthSource(oauthType));
         response.sendRedirect(authRequest.authorize(oauthType + "::" + AuthStateUtils.createState()));
@@ -75,12 +76,31 @@ public class OauthController {
      * @param callback  携带返回的信息
      * @return 登录成功后的信息
      */
-    @RequestMapping("/{oauthType}/callback")
-    public AuthResponse login(@PathVariable String oauthType, AuthCallback callback) {
-        AuthRequest authRequest = factory.get(getAuthSource(oauthType));
-        AuthResponse response = authRequest.login(callback);
+    @RequestMapping("/")
+    public ModelAndView login(AuthCallback callback, HttpServletRequest request, HttpServletResponse response) {
+        ModelAndView modelAndView = new ModelAndView();
+        // TODO authType
+        AuthRequest authRequest = factory.get(getAuthSource("GITHUB"));
+        AuthResponse authResponse = authRequest.login(callback);
         log.info("[response] = {}", JSONUtil.toJsonStr(response));
-        return response;
+
+        AuthUser user = (AuthUser) authResponse.getData();
+        String email = user.getEmail();
+        if (!SystemProperty.getEmail().equals(email)){
+            return buildFailResult(modelAndView);
+        }
+
+        String username = user.getUsername();
+        String avatar = user.getAvatar();
+
+        User sessionUser = new User();
+        // session cookie
+        String cookieValue = sessionCookieContainer.setSessionCookieValue(auth);
+        sessionCookieContainer.setSessionCookie(request, response, cookieValue, 0);
+        sessionCookieContainer.setSession(request, user, 0);
+        sessionCookieContainer.setSession(request, user, 0);
+        modelAndView.setViewName("/index");
+        return modelAndView;
     }
 
     /**
@@ -106,8 +126,8 @@ public class OauthController {
     /**
      * 账号密码登录认证
      */
-    @PostMapping("/login")
-    public ModelAndView renderAuth(@RequestParam("email") String email, @RequestParam("password") String password,
+    @PostMapping(PREFIX + "/login")
+    public ModelAndView login(@RequestParam("email") String email, @RequestParam("password") String password,
                                    HttpServletRequest request, HttpServletResponse response) {
         ModelAndView modelAndView = new ModelAndView();
         // 认证邮箱
@@ -128,7 +148,7 @@ public class OauthController {
         // session cookie
         String cookieValue = sessionCookieContainer.setSessionCookieValue(auth);
         sessionCookieContainer.setSessionCookie(request, response, cookieValue, 0);
-        sessionCookieContainer.setSession(request, response, user, 0);
+        sessionCookieContainer.setSession(request, user, 0);
         modelAndView.setViewName("/index");
         return modelAndView;
     }

@@ -30,4 +30,15 @@ public class SystemProperty {
     public void setHost(String host) {
         SystemProperty.host = host;
     }
+
+    private static String email;
+
+    public static String getEmail() {
+        return email;
+    }
+
+    @Value("${system.property.email}")
+    public void setEmail(String email) {
+        SystemProperty.email = email;
+    }
 }

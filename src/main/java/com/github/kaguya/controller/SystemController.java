@@ -1,7 +1,6 @@
 package com.github.kaguya.controller;
 
 import com.github.kaguya.config.SessionCookieContainer;
-import com.github.kaguya.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -13,14 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 public class SystemController {
 
     @Resource
-    private UserService userService;
-    @Resource
     private SessionCookieContainer sessionCookieContainer;
-
-    @RequestMapping("/")
-    public String index() {
-        return "index";
-    }
 
     @RequestMapping("/loginPage")
     public String loginPage() {
