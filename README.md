@@ -11,6 +11,11 @@ Kaguya maybe is a simple daily web system, there is not administrator, there is 
 * MySQL 5.7
 * Redis 3.2
 * Java8
+
+# Feature
+* add Category
+* add Document
+* login oauth
  
 ## License
 [BSD 3-Clause](./LICENSE)
