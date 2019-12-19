@@ -177,13 +177,6 @@ public class SessionCookieContainer {
     }
 
     /**
-     * 设置session
-     */
-    public void setSession(HttpServletRequest request) {
-        getLoginUser(request);
-    }
-
-    /**
      * 设置session，只存储username和avatar
      *
      * @param expiry 过期时间，单位秒。0表示使用默认
@@ -195,6 +188,16 @@ public class SessionCookieContainer {
         sessionUser.setUsername(user.getUsername());
         sessionUser.setAvatar(SecurityUtil.base64Str(user.getAvatar()));
         setSession(request, USER_SESSION, sessionUser, expiry);
+    }
+
+    /**
+     * 设置session，只存储username和avatar
+     */
+    public void setSession(HttpServletRequest request, OAuth user) {
+        OAuth sessionUser = new OAuth();
+        sessionUser.setUsername(user.getUsername());
+        sessionUser.setAvatar(SecurityUtil.base64Str(user.getAvatar()));
+        setSession(request, USER_SESSION, sessionUser, 0);
     }
 
     /**
