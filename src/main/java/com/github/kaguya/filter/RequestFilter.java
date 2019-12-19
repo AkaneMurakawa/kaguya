@@ -27,9 +27,9 @@ public class RequestFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         try {
-            if (null == sessionCookieContainer.getUserSession(request)) {
-                sessionCookieContainer.setSession(request);
-            }
+//            if (null == sessionCookieContainer.getUserSession(request)) {
+//                sessionCookieContainer.setSession(request);
+//            }
             filterChain.doFilter(request, response);
         }catch (Exception e){
             e.printStackTrace();

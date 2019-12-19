@@ -7,12 +7,12 @@ import com.github.kaguya.config.SessionCookieContainer;
 import com.github.kaguya.config.SystemProperty;
 import com.github.kaguya.constant.OAuthType;
 import com.github.kaguya.exception.model.ResponseMsg;
-import com.github.kaguya.model.LocalOAuthUser;
-import com.github.kaguya.model.ThirdOAuthUser;
-import com.github.kaguya.model.User;
+import com.github.kaguya.model.LocalOAuth;
+import com.github.kaguya.model.LocalUser;
+import com.github.kaguya.model.ThirdOAuth;
 import com.github.kaguya.service.LocalOAuthService;
-import com.github.kaguya.service.ThirdOAuthUserService;
-import com.github.kaguya.service.UserService;
+import com.github.kaguya.service.ThirdOAuthService;
+import com.github.kaguya.service.LocalUserService;
 import com.github.kaguya.util.SecurityUtil;
 import com.xkcoding.justauth.AuthRequestFactory;
 import lombok.RequiredArgsConstructor;
@@ -46,9 +46,9 @@ public class OauthController {
     private static final int SUCCESS_CODE = 2000;
 
     @Resource
-    private UserService userService;
+    private LocalUserService localUserService;
     @Resource
-    private ThirdOAuthUserService thirdOAuthUserService;
+    private ThirdOAuthService thirdOAuthService;
     @Resource
     private LocalOAuthService localOAuthService;
     @Resource
@@ -84,10 +84,10 @@ public class OauthController {
     public ModelAndView login(AuthCallback callback, HttpServletRequest request, HttpServletResponse response) {
         ModelAndView modelAndView = new ModelAndView();
         // 未登录时的跳转
-        if (null == callback.getAuth_code()){
-            modelAndView.setViewName("/index");
-            return modelAndView;
-        }
+//        if (null == callback.getAuth_code()){
+//            modelAndView.setViewName("/index");
+//            return modelAndView;
+//        }
         // TODO authType
         AuthRequest authRequest = factory.get(getAuthSource("GITHUB"));
         AuthResponse authResponse = authRequest.login(callback);
@@ -101,17 +101,18 @@ public class OauthController {
         }
 
         // 第三方数据
-        String username = user.getUsername();
         String avatar = user.getAvatar();
         Long userId = Long.parseLong(user.getUuid());
         String token = user.getToken().getAccessToken();
 
-        ThirdOAuthUser sessionUser = new ThirdOAuthUser();
+        ThirdOAuth sessionUser = new ThirdOAuth();
         BeanUtils.copyProperties(user, sessionUser);
         sessionUser.setAvatar(SecurityUtil.base64(avatar.getBytes()));
+        sessionUser.setUserId(userId);
+        sessionUser.setToken(token);
 
         // 存储第三方登录用户信息
-        thirdOAuthUserService.add(sessionUser);
+        thirdOAuthService.add(sessionUser);
         // session cookie
         String cookieValue = sessionCookieContainer.setSessionCookieValue(OAuthType.THIRD_TYPE, userId, token);
         sessionCookieContainer.setSessionCookie(request, response, cookieValue, 0);
@@ -148,12 +149,12 @@ public class OauthController {
                                    HttpServletRequest request, HttpServletResponse response) {
         ModelAndView modelAndView = new ModelAndView();
         // 认证邮箱
-        User user = userService.getUser(email);
-        if (null == user) {
+        LocalUser localUser = localUserService.getUser(email);
+        if (null == localUser) {
             return buildFailResult(modelAndView);
         }
         // 认证密码
-        LocalOAuthUser auth = localOAuthService.getLocalOAuth(user.getUserId());
+        LocalOAuth auth = localOAuthService.getLocalOAuth(localUser.getUserId());
         if (null == auth) {
             return buildFailResult(modelAndView);
         }
@@ -165,7 +166,7 @@ public class OauthController {
         // session cookie
         String cookieValue = sessionCookieContainer.setSessionCookieValue(auth);
         sessionCookieContainer.setSessionCookie(request, response, cookieValue, 0);
-        sessionCookieContainer.setSession(request, user, 0);
+        sessionCookieContainer.setSession(request, localUser, 0);
         modelAndView.setViewName("/index");
         return modelAndView;
     }

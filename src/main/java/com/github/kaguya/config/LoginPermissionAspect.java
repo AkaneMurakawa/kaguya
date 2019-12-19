@@ -1,7 +1,6 @@
 package com.github.kaguya.config;
 
 import com.github.kaguya.annotation.LoginPermission;
-import com.github.kaguya.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

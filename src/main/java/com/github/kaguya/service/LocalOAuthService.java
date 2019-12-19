@@ -1,8 +1,8 @@
 package com.github.kaguya.service;
 
-import com.github.kaguya.model.LocalOAuthUser;
+import com.github.kaguya.model.LocalOAuth;
 
 public interface LocalOAuthService {
 
-    LocalOAuthUser getLocalOAuth(Long userId);
+    LocalOAuth getLocalOAuth(Long userId);
 }

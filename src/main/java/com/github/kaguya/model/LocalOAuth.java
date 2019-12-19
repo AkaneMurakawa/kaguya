@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class LocalOAuthUser extends OAuthUser implements Serializable {
+public class LocalOAuth implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

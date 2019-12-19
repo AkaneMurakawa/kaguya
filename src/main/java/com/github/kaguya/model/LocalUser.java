@@ -6,8 +6,7 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 @Data
-@Accessors(chain = true)
-public class User extends OAuthUser implements Serializable {
+public class LocalUser extends OAuth implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**
@@ -15,25 +14,9 @@ public class User extends OAuthUser implements Serializable {
      */
     private Long tid;
     /**
-     * 用户id
-     */
-    private Long userId;
-    /**
-     * 昵称
-     */
-    private String username;
-    /**
-     * 邮箱(登录账号)
-     */
-    private String email;
-    /**
      * 用户性别
      */
     private String sex;
-    /**
-     * 头像
-     */
-    private String avatar;
     /**
      * 简介
      */

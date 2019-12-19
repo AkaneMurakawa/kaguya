@@ -3,10 +3,10 @@ package com.github.kaguya;
 import com.github.kaguya.config.SessionCookieContainer;
 import com.github.kaguya.dao.mapper.LocalOAuthMapper;
 import com.github.kaguya.dao.mapper.CategoryMapper;
-import com.github.kaguya.dao.mapper.UserMapper;
-import com.github.kaguya.model.LocalOAuthUser;
+import com.github.kaguya.dao.mapper.LocalUserMapper;
+import com.github.kaguya.model.LocalOAuth;
 import com.github.kaguya.model.Category;
-import com.github.kaguya.model.User;
+import com.github.kaguya.model.LocalUser;
 import com.github.kaguya.util.SecurityUtil;
 import com.github.kaguya.util.SnowFlake;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ public class KaguyaApplicationTests {
     @Resource
     private CategoryMapper categoryMapper;
     @Resource
-    private UserMapper userMapper;
+    private LocalUserMapper localUserMapper;
     @Resource
     private LocalOAuthMapper localOAuthMapper;
     @Resource
@@ -62,14 +62,14 @@ public class KaguyaApplicationTests {
     @Test
     public void user() {
         Long userId = SnowFlake.generateId();
-        User user = new User();
-        user.setUserId(userId);
-        user.setUsername("AkaneMurakwa");
-        user.setEmail("chenshjing@gmail.com");
-        user.setAvatar(SecurityUtil.base64("https://avatars1.githubusercontent.com/u/23401691?s=460&v=4".getBytes()));
-        userMapper.insert(user);
+        LocalUser localUser = new LocalUser();
+        localUser.setUserId(userId);
+        localUser.setUsername("AkaneMurakwa");
+        localUser.setEmail("chenshjing@gmail.com");
+        localUser.setAvatar(SecurityUtil.base64("https://avatars1.githubusercontent.com/u/23401691?s=460&v=4".getBytes()));
+        localUserMapper.insert(localUser);
 
-        LocalOAuthUser localOAuth = new LocalOAuthUser();
+        LocalOAuth localOAuth = new LocalOAuth();
         localOAuth.setUserId(userId);
         localOAuth.setSalt(SecurityUtil.sha256Hex(userId.toString()));
         localOAuth.setPassword(sessionCookieContainer.getPassword("123456", localOAuth.getSalt()));

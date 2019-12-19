@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50716
 File Encoding         : 65001
 
-Date: 2019-12-19 11:44:20
+Date: 2019-12-19 16:09:14
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -114,6 +114,31 @@ CREATE TABLE `local_o_auth` (
 INSERT INTO `local_o_auth` VALUES ('1', '11676640061952000', '40e11265427f75e0f1ac9f3bbb6a41ac3b938867661fa04001c4c917a46937ad', 'c7bcdab6e9558eb93ee6b2963ae989553f2196df1587aefa2b1dece465fcf55d');
 
 -- ----------------------------
+-- Table structure for local_user
+-- ----------------------------
+DROP TABLE IF EXISTS `local_user`;
+CREATE TABLE `local_user` (
+  `tid` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `user_id` bigint(11) NOT NULL COMMENT '用户id',
+  `username` varchar(45) CHARACTER SET utf8 NOT NULL COMMENT '昵称',
+  `email` varchar(45) NOT NULL COMMENT '邮箱(登录名)',
+  `sex` char(2) DEFAULT 'M' COMMENT '用户性别',
+  `avatar` varchar(255) NOT NULL DEFAULT 'aHR0cHM6Ly9hdmF0YXJzMS5naXRodWJ1c2VyY29udGVudC5jb20vdS8yMzQwMTY5MT9zPTQ2MCZ2PTQ=' COMMENT '头像',
+  `description` varchar(150) DEFAULT '简单一句话，介绍你自己' COMMENT '简介',
+  `github` varchar(100) DEFAULT NULL COMMENT 'github',
+  `twitter` varchar(100) DEFAULT NULL COMMENT 'twitter',
+  `weibo` varchar(100) DEFAULT NULL COMMENT 'weibo',
+  PRIMARY KEY (`tid`) USING BTREE,
+  UNIQUE KEY `uk_email` (`email`) USING BTREE,
+  UNIQUE KEY `uk_user_id` (`user_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='用户基本信息表';
+
+-- ----------------------------
+-- Records of local_user
+-- ----------------------------
+INSERT INTO `local_user` VALUES ('1', '11676640061952000', 'AkaneMurakwa', 'chenshjing@gmail.com', null, 'aHR0cHM6Ly9hdmF0YXJzMS5naXRodWJ1c2VyY29udGVudC5jb20vdS8yMzQwMTY5MT9zPTQ2MCZ2PTQ=', null, null, null, null);
+
+-- ----------------------------
 -- Table structure for third_o_auth
 -- ----------------------------
 DROP TABLE IF EXISTS `third_o_auth`;
@@ -137,28 +162,3 @@ CREATE TABLE `third_o_auth` (
 -- ----------------------------
 -- Records of third_o_auth
 -- ----------------------------
-
--- ----------------------------
--- Table structure for user
--- ----------------------------
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user` (
-  `tid` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `user_id` bigint(11) NOT NULL COMMENT '用户id',
-  `username` varchar(45) CHARACTER SET utf8 NOT NULL COMMENT '昵称',
-  `email` varchar(45) NOT NULL COMMENT '邮箱(登录名)',
-  `sex` char(2) DEFAULT 'M' COMMENT '用户性别',
-  `avatar` varchar(255) NOT NULL DEFAULT 'aHR0cHM6Ly9hdmF0YXJzMS5naXRodWJ1c2VyY29udGVudC5jb20vdS8yMzQwMTY5MT9zPTQ2MCZ2PTQ=' COMMENT '头像',
-  `description` varchar(150) DEFAULT '简单一句话，介绍你自己' COMMENT '简介',
-  `github` varchar(100) DEFAULT NULL COMMENT 'github',
-  `twitter` varchar(100) DEFAULT NULL COMMENT 'twitter',
-  `weibo` varchar(100) DEFAULT NULL COMMENT 'weibo',
-  PRIMARY KEY (`tid`) USING BTREE,
-  UNIQUE KEY `uk_email` (`email`) USING BTREE,
-  UNIQUE KEY `uk_user_id` (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='用户基本信息表';
-
--- ----------------------------
--- Records of user
--- ----------------------------
-INSERT INTO `user` VALUES ('1', '11676640061952000', 'AkaneMurakwa', 'chenshjing@gmail.com', null, 'aHR0cHM6Ly9hdmF0YXJzMS5naXRodWJ1c2VyY29udGVudC5jb20vdS8yMzQwMTY5MT9zPTQ2MCZ2PTQ=', null, null, null, null);

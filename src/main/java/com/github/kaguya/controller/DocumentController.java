@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Objects;
 
 @Controller
@@ -42,6 +43,10 @@ public class DocumentController {
             Long documentId = docsTree.getGroups().get(0).getDocumentId();
             Document doc = documentService.getDoc(documentId);
             modelAndView.addObject("doc", doc);
+        }else{
+            docsTree = new DocumentTreeDTO();
+            docsTree.setGroups(new ArrayList<>());
+            modelAndView.addObject("doc", new Document());
         }
         modelAndView.addObject("docsTree", docsTree);
         modelAndView.setViewName("docs/detail");

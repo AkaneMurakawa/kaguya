@@ -3,12 +3,12 @@ package com.github.kaguya.config;
 import com.github.kaguya.constant.CommonConstant;
 import com.github.kaguya.constant.OAuthType;
 import com.github.kaguya.dao.RedisDao;
-import com.github.kaguya.dao.mapper.ThirdOAuthUserMapper;
-import com.github.kaguya.dao.mapper.UserMapper;
-import com.github.kaguya.model.LocalOAuthUser;
-import com.github.kaguya.model.OAuthUser;
-import com.github.kaguya.model.ThirdOAuthUser;
-import com.github.kaguya.model.User;
+import com.github.kaguya.dao.mapper.ThirdOAuthMapper;
+import com.github.kaguya.dao.mapper.LocalUserMapper;
+import com.github.kaguya.model.LocalOAuth;
+import com.github.kaguya.model.LocalUser;
+import com.github.kaguya.model.OAuth;
+import com.github.kaguya.model.ThirdOAuth;
 import com.github.kaguya.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -39,9 +39,9 @@ public class SessionCookieContainer {
     @Resource
     private RedisDao redisDao;
     @Resource
-    private UserMapper userMapper;
+    private LocalUserMapper localUserMapper;
     @Resource
-    private ThirdOAuthUserMapper thirdOAuthUserMapper;
+    private ThirdOAuthMapper thirdOAuthMapper;
 
     /**
      * 是否登录，依赖cookie
@@ -58,34 +58,33 @@ public class SessionCookieContainer {
     /**
      * 获取登录用户信息
      */
-    public OAuthUser getLoginUser(HttpServletRequest request) {
+    public OAuth getLoginUser(HttpServletRequest request) {
         String[] userTypeAndId = getUserTypeAndId(request);
         if (null == userTypeAndId) {
             return null;
         }
 
-        OAuthUser user = null;
+        OAuth user = null;
         String userType = userTypeAndId[0];
         String userId = userTypeAndId[1];
         // 本地登录
         if (OAuthType.LOCAL_TYPE.getType().equals(userType)) {
-            user = (User) redisDao.get(REDIS_EY_PREFIX + userId);
+            user = (LocalUser) redisDao.get(REDIS_EY_PREFIX + userId);
             if (null == user){
-                User tempUser = new User().setUserId(Long.parseLong(userId));
-                user = userMapper.selectOne(tempUser);
+                LocalUser tempLocalUserUser = new LocalUser();
+                tempLocalUserUser.setUserId(Long.parseLong(userId));
+                user = localUserMapper.selectOne(tempLocalUserUser);
             }
         } else {
             // 第三方登录
-            user = (ThirdOAuthUser) redisDao.get(REDIS_EY_PREFIX + userId);
+            user = (ThirdOAuth) redisDao.get(REDIS_EY_PREFIX + userId);
             if (null == user){
-                ThirdOAuthUser tempUser = new ThirdOAuthUser().setUserId(Long.parseLong(userId));
-                user = thirdOAuthUserMapper.selectOne(tempUser);
+                ThirdOAuth tempUser = new ThirdOAuth();
+                tempUser.setUserId(Long.parseLong(userId));
+                user = thirdOAuthMapper.selectOne(tempUser);
             }
         }
 
-//        if (null == request.getSession().getAttribute(USER_SESSION)) {
-//            setSession(request, USER_SESSION, user, 0);
-//        }
         return user;
     }
 
@@ -105,7 +104,7 @@ public class SessionCookieContainer {
      * type:userId:过期时间:token(salt)
      * base64加密
      */
-    public String setSessionCookieValue(LocalOAuthUser auth) {
+    public String setSessionCookieValue(LocalOAuth auth) {
         return setSessionCookieValue(OAuthType.LOCAL_TYPE, auth.getUserId(), auth.getSalt());
     }
 
@@ -189,10 +188,10 @@ public class SessionCookieContainer {
      *
      * @param expiry 过期时间，单位秒。0表示使用默认
      */
-    public void setSession(HttpServletRequest request, OAuthUser user, int expiry) {
+    public void setSession(HttpServletRequest request, OAuth user, int expiry) {
         saveUser(user);
 
-        OAuthUser sessionUser = new OAuthUser();
+        OAuth sessionUser = new OAuth();
         sessionUser.setUsername(user.getUsername());
         sessionUser.setAvatar(SecurityUtil.base64Str(user.getAvatar()));
         setSession(request, USER_SESSION, sessionUser, expiry);
@@ -221,7 +220,7 @@ public class SessionCookieContainer {
     /**
      * 存储用户信息到redis
      */
-    private void saveUser(OAuthUser user) {
+    private void saveUser(OAuth user) {
         redisDao.set(REDIS_EY_PREFIX + user.getUserId(), user, REDIS_EXPIRE * 7);
     }
 
@@ -234,16 +233,20 @@ public class SessionCookieContainer {
 
     /**
      * 清除登录信息
+     * cookie
+     * session
+     * redis
      */
     public void clear(HttpServletRequest request, HttpServletResponse response) {
+        Cookie cookie = new Cookie(SESSION_COOKIE, null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        request.getSession().removeAttribute(USER_SESSION);
+
         String[] userTypeAndId = getUserTypeAndId(request);
         if (userTypeAndId != null) {
-            String userId = userTypeAndId[0];
+            String userId = userTypeAndId[1];
             removeUser(userId);
-            Cookie cookie = new Cookie(SESSION_COOKIE, null);
-            cookie.setMaxAge(0);
-            response.addCookie(cookie);
-            request.getSession().removeAttribute(USER_SESSION);
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.github.kaguya.service.impl;
 
 import com.github.kaguya.dao.mapper.LocalOAuthMapper;
-import com.github.kaguya.model.LocalOAuthUser;
+import com.github.kaguya.model.LocalOAuth;
 import com.github.kaguya.service.LocalOAuthService;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +15,8 @@ public class LocalOAuthServiceImpl implements LocalOAuthService {
     private LocalOAuthMapper localOAuthMapper;
 
     @Override
-    public LocalOAuthUser getLocalOAuth(Long userId) {
-        LocalOAuthUser oAuth = new LocalOAuthUser();
+    public LocalOAuth getLocalOAuth(Long userId) {
+        LocalOAuth oAuth = new LocalOAuth();
         oAuth.setUserId(userId);
         return localOAuthMapper.selectOne(oAuth);
     }
