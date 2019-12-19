@@ -34,7 +34,6 @@ public class RequestFilter implements Filter {
                 sessionCookieContainer.setSession(request, user);
             }
         }catch (Exception e){
-            e.printStackTrace();
             log.error("filter set session failed", e);
         }
     }

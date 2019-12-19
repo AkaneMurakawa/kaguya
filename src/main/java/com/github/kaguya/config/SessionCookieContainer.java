@@ -147,9 +147,11 @@ public class SessionCookieContainer {
      */
     public String getSessionCookieValue(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if (SESSION_COOKIE.equals(cookie.getName())) {
-                return SecurityUtil.base64Str(cookie.getValue());
+        if (cookies != null){
+            for (Cookie cookie : cookies) {
+                if (SESSION_COOKIE.equals(cookie.getName())) {
+                    return SecurityUtil.base64Str(cookie.getValue());
+                }
             }
         }
         return null;

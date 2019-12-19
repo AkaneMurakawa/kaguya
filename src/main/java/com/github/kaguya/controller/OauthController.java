@@ -23,6 +23,7 @@ import me.zhyd.oauth.model.AuthResponse;
 import me.zhyd.oauth.model.AuthUser;
 import me.zhyd.oauth.request.AuthRequest;
 import me.zhyd.oauth.utils.AuthStateUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -148,9 +149,15 @@ public class OauthController {
      * 账号密码登录认证
      */
     @PostMapping(PREFIX + "/login")
-    public ModelAndView login(@RequestParam("email") String email, @RequestParam("password") String password,
-                                   HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView login(@RequestParam(name = "email", required = false) String email,
+                              @RequestParam(name = "password", required = false) String password,
+                              HttpServletRequest request, HttpServletResponse response) {
         ModelAndView modelAndView = new ModelAndView();
+
+        if (StringUtils.isEmpty(email)){
+            modelAndView.setViewName("/index");
+            return modelAndView;
+        }
         // 认证邮箱
         LocalUser localUser = localUserService.getUser(email);
         if (null == localUser) {
