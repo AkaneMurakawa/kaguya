@@ -80,18 +80,21 @@ public class OauthController {
      * @param oauthType 第三方登录类型
      * @param callback  携带返回的信息
      */
-    @RequestMapping("/")
-    public ModelAndView login(AuthCallback callback, HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping(PREFIX + "/{oauthType}/callback")
+    public ModelAndView login(@PathVariable("oauthType") String oauthType, AuthCallback callback,
+                              HttpServletRequest request, HttpServletResponse response) {
         ModelAndView modelAndView = new ModelAndView();
-        // 未登录时的跳转
-//        if (null == callback.getAuth_code()){
-//            modelAndView.setViewName("/index");
-//            return modelAndView;
-//        }
-        // TODO authType
-        AuthRequest authRequest = factory.get(getAuthSource("GITHUB"));
-        AuthResponse authResponse = authRequest.login(callback);
-        log.info("[response] = {}", JSONUtil.toJsonStr(response));
+
+        AuthRequest authRequest = factory.get(getAuthSource(oauthType.toUpperCase()));
+        // 可能会出现连接超时
+        AuthResponse authResponse = null;
+        try {
+            authResponse = authRequest.login(callback);
+            log.info("[response] = {}", JSONUtil.toJsonStr(response));
+        }catch (Exception e){
+            log.error("调用第三方验证失败", e);
+        }
+
 
         // 获取第三方返回登录成功的信息
         AuthUser user = (AuthUser) authResponse.getData();

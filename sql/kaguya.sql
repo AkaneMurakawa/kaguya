@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50716
 File Encoding         : 65001
 
-Date: 2019-12-19 16:09:14
+Date: 2019-12-19 18:18:05
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -148,17 +148,19 @@ CREATE TABLE `third_o_auth` (
   `username` varchar(45) NOT NULL COMMENT '昵称',
   `email` varchar(45) NOT NULL COMMENT '邮箱(登录名)',
   `avatar` varchar(255) NOT NULL DEFAULT 'aHR0cHM6Ly9hdmF0YXJzMS5naXRodWJ1c2VyY29udGVudC5jb20vdS8yMzQwMTY5MT9zPTQ2MCZ2PTQ=' COMMENT '头像',
-  `token` varchar(255) DEFAULT NULL,
-  `nickname` varchar(150) DEFAULT NULL COMMENT '别名',
+  `token` varchar(255) NOT NULL,
+  `nickname` varchar(100) DEFAULT NULL COMMENT '别名',
   `blog` varchar(100) DEFAULT NULL COMMENT '博客',
   `company` varchar(100) DEFAULT NULL COMMENT '公司',
   `location` varchar(100) DEFAULT NULL COMMENT '位置',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`tid`) USING BTREE,
   UNIQUE KEY `uk_email` (`email`) USING BTREE,
-  UNIQUE KEY `uk_user_id` (`user_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='第三方用户基本信息表';
+  UNIQUE KEY `uk_user_id` (`user_id`) USING BTREE,
+  UNIQUE KEY `uk_token` (`token`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='第三方用户基本信息表';
 
 -- ----------------------------
 -- Records of third_o_auth
 -- ----------------------------
+INSERT INTO `third_o_auth` VALUES ('1', '23401691', 'AkaneMurakawa', 'chenshjing@gmail.com', 'aHR0cHM6Ly9hdmF0YXJzMC5naXRodWJ1c2VyY29udGVudC5jb20vdS8yMzQwMTY5MT92PTQ=', '509d288f05999d8e3b9507fb024f9be3ba5fef4f', 'Akane Murakawa', 'http://yuumasan.com/', null, null, '如果你都不知道自己想去哪里，那去哪里都是一样的。');

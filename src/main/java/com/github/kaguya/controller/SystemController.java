@@ -14,6 +14,11 @@ public class SystemController {
     @Resource
     private SessionCookieContainer sessionCookieContainer;
 
+    @RequestMapping("/")
+    public String index() {
+        return "index";
+    }
+
     @RequestMapping("/loginPage")
     public String loginPage() {
         return "login";

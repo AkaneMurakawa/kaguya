@@ -2,6 +2,9 @@ package com.github.kaguya.exception.config;
 
 import com.github.kaguya.exception.BusinessException;
 import com.github.kaguya.exception.model.ResponseMsg;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpException;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * 全局异常处理类
  */
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -28,6 +32,16 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ResponseMsg BusinessExceptionHandler(BusinessException e) throws BusinessException {
         return e.getResponseMsg();
+
+    }
+
+    /**
+     * 业务的异常处理
+     */
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseBody
+    public ResponseMsg RuntimeExceptionHandler(RuntimeException e) throws RuntimeException {
+        return ResponseMsg.buildFailResult("程序内部错误");
 
     }
 }
