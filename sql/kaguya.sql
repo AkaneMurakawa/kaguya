@@ -10,28 +10,10 @@ Target Server Type    : MYSQL
 Target Server Version : 50716
 File Encoding         : 65001
 
-Date: 2019-12-18 21:02:30
+Date: 2019-12-19 11:44:20
 */
 
 SET FOREIGN_KEY_CHECKS=0;
-
--- ----------------------------
--- Table structure for admin_o_auth
--- ----------------------------
-DROP TABLE IF EXISTS `admin_o_auth`;
-CREATE TABLE `admin_o_auth` (
-  `tid` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `user_id` bigint(11) NOT NULL COMMENT '用户id',
-  `salt` varchar(64) NOT NULL COMMENT '盐值',
-  `password` varchar(64) NOT NULL COMMENT '密码',
-  PRIMARY KEY (`tid`) USING BTREE,
-  UNIQUE KEY `uk_user_id` (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='管理员认证';
-
--- ----------------------------
--- Records of admin_o_auth
--- ----------------------------
-INSERT INTO `admin_o_auth` VALUES ('1', '11676640061952000', '40e11265427f75e0f1ac9f3bbb6a41ac3b938867661fa04001c4c917a46937ad', 'c7bcdab6e9558eb93ee6b2963ae989553f2196df1587aefa2b1dece465fcf55d');
 
 -- ----------------------------
 -- Table structure for category
@@ -114,25 +96,46 @@ INSERT INTO `document_group` VALUES ('6', '13521233892085760', '1346751782663372
 INSERT INTO `document_group` VALUES ('7', '13526443972628480', '11856480811618304', '11676648115015680', '0', 'markdown语法测试');
 
 -- ----------------------------
--- Table structure for oauth
+-- Table structure for local_o_auth
 -- ----------------------------
-DROP TABLE IF EXISTS `oauth`;
-CREATE TABLE `oauth` (
-  `id` bigint(20) NOT NULL,
-  `createdAt` bigint(20) NOT NULL,
-  `expiresAt` bigint(20) NOT NULL,
-  `updatedAt` bigint(20) NOT NULL,
-  `userId` bigint(20) NOT NULL,
-  `version` bigint(20) NOT NULL,
-  `authProviderId` varchar(32) NOT NULL,
-  `authId` varchar(255) NOT NULL,
-  `authToken` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `UNI_AUTH` (`authProviderId`,`authId`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+DROP TABLE IF EXISTS `local_o_auth`;
+CREATE TABLE `local_o_auth` (
+  `tid` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `user_id` bigint(11) NOT NULL COMMENT '用户id',
+  `salt` varchar(64) NOT NULL COMMENT '盐值',
+  `password` varchar(64) NOT NULL COMMENT '密码',
+  PRIMARY KEY (`tid`) USING BTREE,
+  UNIQUE KEY `uk_user_id` (`user_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='管理员认证';
 
 -- ----------------------------
--- Records of oauth
+-- Records of local_o_auth
+-- ----------------------------
+INSERT INTO `local_o_auth` VALUES ('1', '11676640061952000', '40e11265427f75e0f1ac9f3bbb6a41ac3b938867661fa04001c4c917a46937ad', 'c7bcdab6e9558eb93ee6b2963ae989553f2196df1587aefa2b1dece465fcf55d');
+
+-- ----------------------------
+-- Table structure for third_o_auth
+-- ----------------------------
+DROP TABLE IF EXISTS `third_o_auth`;
+CREATE TABLE `third_o_auth` (
+  `tid` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `user_id` bigint(11) NOT NULL COMMENT '用户id',
+  `username` varchar(45) NOT NULL COMMENT '昵称',
+  `email` varchar(45) NOT NULL COMMENT '邮箱(登录名)',
+  `avatar` varchar(255) NOT NULL DEFAULT 'aHR0cHM6Ly9hdmF0YXJzMS5naXRodWJ1c2VyY29udGVudC5jb20vdS8yMzQwMTY5MT9zPTQ2MCZ2PTQ=' COMMENT '头像',
+  `token` varchar(255) DEFAULT NULL,
+  `nickname` varchar(150) DEFAULT NULL COMMENT '别名',
+  `blog` varchar(100) DEFAULT NULL COMMENT '博客',
+  `company` varchar(100) DEFAULT NULL COMMENT '公司',
+  `location` varchar(100) DEFAULT NULL COMMENT '位置',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`tid`) USING BTREE,
+  UNIQUE KEY `uk_email` (`email`) USING BTREE,
+  UNIQUE KEY `uk_user_id` (`user_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='第三方用户基本信息表';
+
+-- ----------------------------
+-- Records of third_o_auth
 -- ----------------------------
 
 -- ----------------------------

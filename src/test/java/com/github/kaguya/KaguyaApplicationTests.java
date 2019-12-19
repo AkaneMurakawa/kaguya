@@ -1,10 +1,10 @@
 package com.github.kaguya;
 
 import com.github.kaguya.config.SessionCookieContainer;
-import com.github.kaguya.dao.mapper.AdminOAuthMapper;
+import com.github.kaguya.dao.mapper.LocalOAuthMapper;
 import com.github.kaguya.dao.mapper.CategoryMapper;
 import com.github.kaguya.dao.mapper.UserMapper;
-import com.github.kaguya.model.AdminOAuth;
+import com.github.kaguya.model.LocalOAuthUser;
 import com.github.kaguya.model.Category;
 import com.github.kaguya.model.User;
 import com.github.kaguya.util.SecurityUtil;
@@ -22,7 +22,7 @@ public class KaguyaApplicationTests {
     @Resource
     private UserMapper userMapper;
     @Resource
-    private AdminOAuthMapper adminOAuthMapper;
+    private LocalOAuthMapper localOAuthMapper;
     @Resource
     private SessionCookieContainer sessionCookieContainer;
 
@@ -69,11 +69,11 @@ public class KaguyaApplicationTests {
         user.setAvatar(SecurityUtil.base64("https://avatars1.githubusercontent.com/u/23401691?s=460&v=4".getBytes()));
         userMapper.insert(user);
 
-        AdminOAuth adminOAuth = new AdminOAuth();
-        adminOAuth.setUserId(userId);
-        adminOAuth.setSalt(SecurityUtil.sha256Hex(userId.toString()));
-        adminOAuth.setPassword(sessionCookieContainer.getPassword("123456", adminOAuth.getSalt()));
-        adminOAuthMapper.insert(adminOAuth);
+        LocalOAuthUser localOAuth = new LocalOAuthUser();
+        localOAuth.setUserId(userId);
+        localOAuth.setSalt(SecurityUtil.sha256Hex(userId.toString()));
+        localOAuth.setPassword(sessionCookieContainer.getPassword("123456", localOAuth.getSalt()));
+        localOAuthMapper.insert(localOAuth);
     }
 
     @Test

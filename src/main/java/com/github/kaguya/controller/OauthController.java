@@ -5,10 +5,13 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.github.kaguya.config.SessionCookieContainer;
 import com.github.kaguya.config.SystemProperty;
+import com.github.kaguya.constant.OAuthType;
 import com.github.kaguya.exception.model.ResponseMsg;
-import com.github.kaguya.model.AdminOAuth;
+import com.github.kaguya.model.LocalOAuthUser;
+import com.github.kaguya.model.ThirdOAuthUser;
 import com.github.kaguya.model.User;
-import com.github.kaguya.service.AdminOAuthService;
+import com.github.kaguya.service.LocalOAuthService;
+import com.github.kaguya.service.ThirdOAuthUserService;
 import com.github.kaguya.service.UserService;
 import com.github.kaguya.util.SecurityUtil;
 import com.xkcoding.justauth.AuthRequestFactory;
@@ -20,6 +23,7 @@ import me.zhyd.oauth.model.AuthResponse;
 import me.zhyd.oauth.model.AuthUser;
 import me.zhyd.oauth.request.AuthRequest;
 import me.zhyd.oauth.utils.AuthStateUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -32,9 +36,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * 第三方登录 Controller
- */
 @Slf4j
 @RestController
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -47,7 +48,9 @@ public class OauthController {
     @Resource
     private UserService userService;
     @Resource
-    private AdminOAuthService adminOAuthService;
+    private ThirdOAuthUserService thirdOAuthUserService;
+    @Resource
+    private LocalOAuthService localOAuthService;
     @Resource
     private SessionCookieContainer sessionCookieContainer;
 
@@ -103,11 +106,14 @@ public class OauthController {
         Long userId = Long.parseLong(user.getUuid());
         String token = user.getToken().getAccessToken();
 
-        User sessionUser = new User()
-                .setUsername(username)
-                .setAvatar(SecurityUtil.base64(avatar.getBytes()));
+        ThirdOAuthUser sessionUser = new ThirdOAuthUser();
+        BeanUtils.copyProperties(user, sessionUser);
+        sessionUser.setAvatar(SecurityUtil.base64(avatar.getBytes()));
+
+        // 存储第三方登录用户信息
+        thirdOAuthUserService.add(sessionUser);
         // session cookie
-        String cookieValue = sessionCookieContainer.setSessionCookieValue(userId, token);
+        String cookieValue = sessionCookieContainer.setSessionCookieValue(OAuthType.THIRD_TYPE, userId, token);
         sessionCookieContainer.setSessionCookie(request, response, cookieValue, 0);
         sessionCookieContainer.setSession(request, sessionUser, 0);
         modelAndView.setViewName("/index");
@@ -147,7 +153,7 @@ public class OauthController {
             return buildFailResult(modelAndView);
         }
         // 认证密码
-        AdminOAuth auth = adminOAuthService.getAdminOAuth(user.getUserId());
+        LocalOAuthUser auth = localOAuthService.getLocalOAuth(user.getUserId());
         if (null == auth) {
             return buildFailResult(modelAndView);
         }

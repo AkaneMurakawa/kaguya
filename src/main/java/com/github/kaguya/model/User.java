@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Data
 @Accessors(chain = true)
-public class User implements Serializable {
+public class User extends OAuthUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**
