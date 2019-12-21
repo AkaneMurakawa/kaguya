@@ -7,21 +7,32 @@ In fact, when I create this new project, I didn't think what to do. Maybe anothe
 
 Kaguya maybe is a simple daily web system, there is not administrator, there is not registration.It more likes a personal home, one note. You can record your daily life with pictures or words.There is your remmember, there is your life,there is your thinking, here is yours.It will be builded by Springboot and spring cloud, and use consul to resolve service discovery, use jekins for automation, use Fegin to resolve HTTP client binder, use Shiro and Cas to implement Single Sign-On, use RabbitMQ to implement Message Queue. 
 
-# Getting started
+## Getting started
 * MySQL 5.7
 * Redis 3.2
 * Java8
 
-# Feature
+## Feature
 * add Category
 * add Document
 * login oauth
 
-![images/index.png](images/index.png)
-![images/doc_tree.png](images/doc_tree.png)
-![images/login.png](images/login.png)
-![images/add_document.png](images/add_document.png)
-![images/add_category.png](images/add_category.png)
+![images/index.png](doc/images/index.png)
+![images/doc_tree.png](doc/images/doc_tree.png)
+![images/login.png](doc/images/login.png)
+![images/add_document.png](doc/images/add_document.png)
+![images/add_category.png](doc/images/add_category.png)
+
+## Builder
+
+### First Step
+configure MySQL and Redis in `application.properties`, then run `kaguya.sql` or `kaguya-no-data.sql`;
+
+### Second Step
+run `com.github.kaguya.KaguyaApplicationTests.user` to init user;
+
+### Third Step
+open [localhost:9420](localhost:9420);
  
 ## License
 [BSD 3-Clause](./LICENSE)

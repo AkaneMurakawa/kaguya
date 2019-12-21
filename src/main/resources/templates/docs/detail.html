@@ -4,31 +4,53 @@
     <meta charset="UTF-8">
     <title>文档</title>
     <link rel="stylesheet" th:href="@{/css/docs/detail.css}">
+    <style class="cp-pen-styles">
+        @import url("//unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css");
+    </style>
 </head>
 <body>
     <header th:replace="~{/layout/header :: header}"></header>
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-4 col-md-3" style="border-right: 1px solid #ddddd8;">
-                <ul class="listingblock" th:each="doc1 : ${docsTree.groups}">
-                    <li>
-                        <a th:href="@{'/docs/' + ${docsTree.categoryName} + '/' + ${doc1.categoryId} + '/' + ${doc1.documentId}}" th:text="${doc1.title}"></a>
-                    </li>
-                    <li th:each="doc2 : ${doc1.children}">
-                        <ul class="list-group">
-                            <li>
-                                <a th:href="@{'/docs/' + ${docsTree.categoryName} + '/' + ${doc2.categoryId} + '/' + ${doc2.documentId}}" th:text="${doc2.title}"></a>
-                            </li>
-                            <li th:each="doc3 : ${doc2.children}">
-                                <ul class="list-group">
-                                    <li>
-                                        <a th:href="@{'/docs/' + ${docsTree.categoryName} + '/' + ${doc3.categoryId} + '/' + ${doc3.documentId}}" th:text="${doc3.title}"></a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
+                <script src="//unpkg.com/vue/dist/vue.js"></script>
+                <script src="//unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+                <div id="app">
+                    <el-input
+                            placeholder="输入关键字进行过滤"
+                            v-model="filterText">
+                    </el-input>
+
+                    <el-tree
+                            class="filter-tree"
+                            :data="data"
+                            :props="defaultProps"
+                            default-expand-all
+                            :filter-node-method="filterNode"
+                            @node-click="handleNodeClick"
+                            ref="tree">
+                    </el-tree>
+                </div>
+
+                <!--<ul class="listingblock" th:each="doc1 : ${docsTree.groups}">-->
+                    <!--<li>-->
+                        <!--<a th:href="@{'/docs/' + ${docsTree.categoryName} + '/' + ${doc1.categoryId} + '/' + ${doc1.documentId}}" th:text="${doc1.title}"></a>-->
+                    <!--</li>-->
+                    <!--<li th:each="doc2 : ${doc1.children}">-->
+                        <!--<ul class="list-group">-->
+                            <!--<li>-->
+                                <!--<a th:href="@{'/docs/' + ${docsTree.categoryName} + '/' + ${doc2.categoryId} + '/' + ${doc2.documentId}}" th:text="${doc2.title}"></a>-->
+                            <!--</li>-->
+                            <!--<li th:each="doc3 : ${doc2.children}">-->
+                                <!--<ul class="list-group">-->
+                                    <!--<li>-->
+                                        <!--<a th:href="@{'/docs/' + ${docsTree.categoryName} + '/' + ${doc3.categoryId} + '/' + ${doc3.documentId}}" th:text="${doc3.title}"></a>-->
+                                    <!--</li>-->
+                                <!--</ul>-->
+                            <!--</li>-->
+                        <!--</ul>-->
+                    <!--</li>-->
+                <!--</ul>-->
             </div>
             <div class="col-sm-8 col-md-8">
                 <div class="doc-content">
@@ -37,6 +59,40 @@
             </div>
         </div>
     </div>
-    <script type="application/javascript" th:src="@{/js/common/bootstrap-treeview.min.js}"></script>
+    <script th:inline="javascript">
+        var tree = [[${docsTree.groups}]];
+        var BASIC_URL = '/docs/' + [[${docsTree.categoryName}]] + '/' + [[${docsTree.categoryId}]] + '/';
+        var Main = {
+            watch: {
+                filterText(val) {
+                    this.$refs.tree.filter(val);
+                }
+            },
+
+            methods: {
+                filterNode(value, data) {
+                    if (!value) return true;
+                    return data.label.indexOf(value) !== -1;
+                },
+                handleNodeClick(data) {
+                    console.log(data);
+                    window.location.href = BASIC_URL + data.documentId;
+                }
+            },
+
+            data() {
+                return {
+                    filterText: '',
+                    data: tree,
+                    defaultProps: {
+                        children: 'children',
+                        label: 'title'
+                    }
+                };
+            }
+        };
+        var Ctor = Vue.extend(Main);
+        new Ctor().$mount('#app');
+    </script>
 </body>
 </html>

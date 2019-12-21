@@ -31,7 +31,9 @@ public class CategoryServiceImpl implements CategoryService {
         if (CollectionUtils.isEmpty(categoryList)) {
             categoryList = categoryMapper.selectAll();
             // 存储到redis，这里需要类型转换
-            redisDao.lSet(key, (List<Object>) (List) categoryList, EXPIRE);
+            if (categoryList != null && categoryList.size() > 0) {
+                redisDao.lSet(key, (List<Object>) (List) categoryList, EXPIRE);
+            }
         }
         return categoryList;
     }

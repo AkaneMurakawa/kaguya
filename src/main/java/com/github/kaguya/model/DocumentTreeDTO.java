@@ -13,8 +13,10 @@ public class DocumentTreeDTO implements Serializable {
      * 分类id
      */
     private Long categoryId;
-
+    /**
+     * 分类名称
+     */
     private String categoryName;
 
-    List<DocumentGroup> groups;
+    List<DocumentGroupVO> groups;
 }

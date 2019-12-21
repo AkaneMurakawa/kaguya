@@ -1,7 +1,6 @@
 package com.github.kaguya.filter;
 
 import com.github.kaguya.config.SessionCookieContainer;
-import com.github.kaguya.model.OAuth;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;
@@ -28,14 +27,16 @@ public class RequestFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         filterChain.doFilter(request, response);
-        try {
-            if (sessionCookieContainer.isLogin(request) && null == sessionCookieContainer.getUserSession(request)){
-                OAuth user = sessionCookieContainer.getLoginUser(request);
-                sessionCookieContainer.setSession(request, user);
-            }
-        }catch (Exception e){
-            log.error("filter set session failed", e);
-        }
+//        try {
+            // TODO
+            // to fix
+//            if (sessionCookieContainer.isLogin(request) && null == sessionCookieContainer.getUserSession(request)){
+//                OAuth user = sessionCookieContainer.getLoginUser(request);
+//                sessionCookieContainer.setSession(request, user);
+//            }
+//        }catch (Exception e){
+//            log.error("filter set session failed", e);
+//        }
     }
 
     @Override

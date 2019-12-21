@@ -1,6 +1,7 @@
 package com.github.kaguya.dao.mapper;
 
 import com.github.kaguya.model.DocumentGroup;
+import com.github.kaguya.model.DocumentGroupVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,12 +13,12 @@ public interface DocumentGroupMapper extends BaseMapper<DocumentGroup> {
     /**
      * 获得分类id下所有一级文档，按order_id升序
      */
-    List<DocumentGroup> getDocsParent(@Param("categoryId") Long categoryId, @Param("ROOT") Integer ROOT);
+    List<DocumentGroupVO> getDocsParent(@Param("categoryId") Long categoryId, @Param("ROOT") Integer ROOT);
 
     /**
      * 获得文档id下所有文档，按order_id升序
      */
-    List<DocumentGroup> getDocsGroup(@Param("documentId") Long documentId);
+    List<DocumentGroupVO> getDocsGroup(@Param("documentId") Long documentId);
 
     /**
      * 获取该分类id下的所有标题

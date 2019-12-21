@@ -1,11 +1,11 @@
 package com.github.kaguya;
 
 import com.github.kaguya.config.SessionCookieContainer;
-import com.github.kaguya.dao.mapper.LocalOAuthMapper;
 import com.github.kaguya.dao.mapper.CategoryMapper;
+import com.github.kaguya.dao.mapper.LocalOAuthMapper;
 import com.github.kaguya.dao.mapper.LocalUserMapper;
-import com.github.kaguya.model.LocalOAuth;
 import com.github.kaguya.model.Category;
+import com.github.kaguya.model.LocalOAuth;
 import com.github.kaguya.model.LocalUser;
 import com.github.kaguya.util.SecurityUtil;
 import com.github.kaguya.util.SnowFlake;
@@ -64,8 +64,8 @@ public class KaguyaApplicationTests {
         Long userId = SnowFlake.generateId();
         LocalUser localUser = new LocalUser();
         localUser.setUserId(userId);
-        localUser.setUsername("AkaneMurakwa");
-        localUser.setEmail("chenshjing@gmail.com");
+        localUser.setUsername("kaguya");
+        localUser.setEmail("test@gmail.com");
         localUser.setAvatar(SecurityUtil.base64("https://avatars1.githubusercontent.com/u/23401691?s=460&v=4".getBytes()));
         localUserMapper.insert(localUser);
 

@@ -6,10 +6,7 @@ import com.github.kaguya.dao.RedisDao;
 import com.github.kaguya.dao.mapper.DocumentGroupMapper;
 import com.github.kaguya.dao.mapper.DocumentMapper;
 import com.github.kaguya.exception.model.ResponseMsg;
-import com.github.kaguya.model.Document;
-import com.github.kaguya.model.DocumentGroup;
-import com.github.kaguya.model.DocumentTreeDTO;
-import com.github.kaguya.model.DocumentVO;
+import com.github.kaguya.model.*;
 import com.github.kaguya.service.DocumentGroupService;
 import com.github.kaguya.util.JsonUtils;
 import com.github.kaguya.util.SnowFlake;
@@ -44,7 +41,7 @@ public class DocumentGroupServiceImpl implements DocumentGroupService {
         Object object = redisDao.get(key);
         if (Objects.isNull(object)) {
             // 获得分类id下所有一级文档
-            List<DocumentGroup> root = documentGroupMapper.getDocsParent(categoryId, PARENT_ID);
+            List<DocumentGroupVO> root = documentGroupMapper.getDocsParent(categoryId, PARENT_ID);
             if (CollectionUtils.isEmpty(root)) {
                 return null;
             }
@@ -62,13 +59,13 @@ public class DocumentGroupServiceImpl implements DocumentGroupService {
     /**
      * 遍历树形文档
      */
-    private List<DocumentGroup> getDocsGroup(List<DocumentGroup> root) {
-        for (DocumentGroup children : root) {
-            List<DocumentGroup> node = documentGroupMapper.getDocsGroup(children.getDocumentId());
+    private List<DocumentGroupVO> getDocsGroup(List<DocumentGroupVO> root) {
+        for (DocumentGroupVO children : root) {
+            List<DocumentGroupVO> node = documentGroupMapper.getDocsGroup(children.getDocumentId());
             if (CollectionUtils.isEmpty(node)) {
                 continue;
             } else {
-                List<DocumentGroup> docsGroup = getDocsGroup(node);
+                List<DocumentGroupVO> docsGroup = getDocsGroup(node);
                 children.setChildren(docsGroup);
             }
         }

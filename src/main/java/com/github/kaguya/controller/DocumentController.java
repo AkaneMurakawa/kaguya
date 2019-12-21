@@ -12,7 +12,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Objects;
 
 @Controller
 @RequestMapping("/docs")
@@ -39,6 +38,7 @@ public class DocumentController {
         // 访问分类时的默认文档
         if (docsTree != null) {
             docsTree.setCategoryName(categoryName);
+            docsTree.setCategoryId(categoryId);
 
             Long documentId = docsTree.getGroups().get(0).getDocumentId();
             Document doc = documentService.getDoc(documentId);
@@ -62,6 +62,7 @@ public class DocumentController {
 
         DocumentTreeDTO docsTree = documentGroupService.getDocsTree(categoryId);
         docsTree.setCategoryName(categoryName);
+        docsTree.setCategoryId(categoryId);
         Document doc = documentService.getDoc(docId);
 
         modelAndView.addObject("docsTree", docsTree);
