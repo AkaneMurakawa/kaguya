@@ -1,5 +1,6 @@
 package com.github.kaguya.controller;
 
+import com.github.kaguya.annotation.LoginPermission;
 import com.github.kaguya.exception.model.ResponseMsg;
 import com.github.kaguya.model.Document;
 import com.github.kaguya.model.DocumentTreeDTO;
@@ -74,7 +75,7 @@ public class DocumentController {
     /**
      * 跳转到新建文档页面
      */
-//    @LoginPermission
+    @LoginPermission
     @RequestMapping("addPage")
     public String addPage() {
         return "docs/addPage";
@@ -84,7 +85,7 @@ public class DocumentController {
      * 新建文档
      */
     @ResponseBody
-//    @LoginPermission
+    @LoginPermission
     @PostMapping("add")
     public ResponseMsg add(@RequestBody DocumentVO documentVO) {
         return documentGroupService.add(documentVO);
