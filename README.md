@@ -16,6 +16,12 @@ Kaguya maybe is a simple daily web system, there is not administrator, there is 
 * add Category
 * add Document
 * login oauth
+
+![images/index.png](images/index.png)
+![images/doc_tree.png](images/doc_tree.png)
+![images/login.png](images/login.png)
+![images/add_document.png](images/add_document.png)
+![images/add_category.png](images/add_category.png)
  
 ## License
 [BSD 3-Clause](./LICENSE)
