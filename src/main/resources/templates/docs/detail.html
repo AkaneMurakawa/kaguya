@@ -31,26 +31,6 @@
                             ref="tree">
                     </el-tree>
                 </div>
-
-                <!--<ul class="listingblock" th:each="doc1 : ${docsTree.groups}">-->
-                    <!--<li>-->
-                        <!--<a th:href="@{'/docs/' + ${docsTree.categoryName} + '/' + ${doc1.categoryId} + '/' + ${doc1.documentId}}" th:text="${doc1.title}"></a>-->
-                    <!--</li>-->
-                    <!--<li th:each="doc2 : ${doc1.children}">-->
-                        <!--<ul class="list-group">-->
-                            <!--<li>-->
-                                <!--<a th:href="@{'/docs/' + ${docsTree.categoryName} + '/' + ${doc2.categoryId} + '/' + ${doc2.documentId}}" th:text="${doc2.title}"></a>-->
-                            <!--</li>-->
-                            <!--<li th:each="doc3 : ${doc2.children}">-->
-                                <!--<ul class="list-group">-->
-                                    <!--<li>-->
-                                        <!--<a th:href="@{'/docs/' + ${docsTree.categoryName} + '/' + ${doc3.categoryId} + '/' + ${doc3.documentId}}" th:text="${doc3.title}"></a>-->
-                                    <!--</li>-->
-                                <!--</ul>-->
-                            <!--</li>-->
-                        <!--</ul>-->
-                    <!--</li>-->
-                <!--</ul>-->
             </div>
             <div class="col-sm-8 col-md-8">
                 <div class="doc-content">
