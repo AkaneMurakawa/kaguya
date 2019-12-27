@@ -1,6 +1,8 @@
 # kaguya
 [![](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
+未启航的树形结构文档系统
+
 ### 特点
 * 树型结构文档
 * 第三方登录认证
