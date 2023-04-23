@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.github.kaguya.biz.document.mapper.DocumentGroupMapper">
+
+    <select id="getDocsParent" resultType="com.github.kaguya.biz.document.model.dto.DocumentGroupDTO">
+      SELECT
+        id,
+        document_id, parent_id, category_id, order_id,
+        title,
+        title AS label
+      FROM document_group
+      WHERE
+        category_id = #{categoryId}
+        AND parent_id = #{root}
+      ORDER BY order_id
+    </select>
+
+    <select id="getDocsGroup" resultType="com.github.kaguya.biz.document.model.dto.DocumentGroupDTO">
+      SELECT
+        id,
+        document_id, parent_id, category_id, order_id,
+        title,
+        title AS label
+      FROM document_group
+      WHERE
+        parent_id = #{documentId}
+      ORDER BY order_id
+    </select>
+
+    <select id="getParents" resultType="com.github.kaguya.biz.document.model.entity.DocumentGroup">
+      SELECT
+        document_id, title
+      FROM document_group
+      WHERE
+        category_id = #{categoryId}
+    </select>
+
+    <select id="getMaxOrderIdBy" resultType="java.lang.Integer">
+      SELECT
+        MAX(order_id)
+      FROM document_group
+      WHERE
+        category_id = #{categoryId}
+        AND parent_id = #{parentId}
+    </select>
+</mapper>
