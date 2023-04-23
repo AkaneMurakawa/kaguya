@@ -93,12 +93,12 @@ public class RedisClient {
             for (String key : keys) {
                 DataType type = redisTemplate.type(key);
                 switch (type) {
-                    case STRING: {
+                    case STRING:
                         log.info("删除String类型key:{},删除前key的值为:{}", key, get(key));
                         redisTemplate.delete(key);
                         break;
-                    }
-                    case LIST: {
+
+                    case LIST:
                         long len = lListSize(key);
                         if (len > 500) {
                             log.warn("该key对应的队列包含数据太多,不能删除");
@@ -107,22 +107,21 @@ public class RedisClient {
                         log.info("删除list类型key:{},删除前key的值为:{}", key, lGet(key, 0, len));
                         redisTemplate.delete(key);
                         break;
-                    }
-                    case HASH: {
+                    case HASH:
                         log.info("删除map类型key:{},删除前key的值为:{}", key, hGet(key));
                         redisTemplate.delete(key);
                         break;
-                    }
-                    case SET: {
+
+                    case SET:
                         log.info("删除set类型key:{},删除前key的值为:{}", key, sGet(key));
                         redisTemplate.delete(key);
                         break;
-                    }
-                    case ZSET: {
+
+                    case ZSET:
                         log.info("删除zset类型key:{},删除前key的值为:{}", key, sGet(key));
                         redisTemplate.delete(key);
                         break;
-                    }
+
                     default:
                         break;
                 }
@@ -495,8 +494,7 @@ public class RedisClient {
      */
     public long setRemove(String key, Object... values) {
         try {
-            Long count = redisTemplate.opsForSet().remove(key, values);
-            return count;
+            return redisTemplate.opsForSet().remove(key, values);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return 0;

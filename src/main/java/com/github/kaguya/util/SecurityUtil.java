@@ -1,13 +1,17 @@
 package com.github.kaguya.util;
 
-import com.google.common.io.BaseEncoding;
 import org.apache.commons.codec.digest.DigestUtils;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Base64;
 
 /**
  * 加密工具
  */
 public class SecurityUtil {
+
+    private SecurityUtil() {
+    }
 
     /**
      * -----------------------------------------MD5------------------------------------------------------------------
@@ -31,7 +35,7 @@ public class SecurityUtil {
         return DigestUtils.sha256Hex(data);
     }
 
-    public static String sha256Hex(byte[] data) throws Exception {
+    public static String sha256Hex(byte[] data) {
         return DigestUtils.sha256Hex(data);
     }
 
@@ -43,15 +47,15 @@ public class SecurityUtil {
      * ----------------------------------------BASE64----------------------------------------------------------------
      */
     public static String base64(byte[] bytes) {
-        return BaseEncoding.base64().encode(bytes);
+        return Arrays.toString(Base64.getEncoder().encode(bytes));
     }
 
     public static byte[] base64(String key) {
-        return BaseEncoding.base64().decode(key);
+        return Base64.getDecoder().decode(key);
     }
 
     public static String base64Str(String key) {
-        return new String(BaseEncoding.base64().decode(key));
+        return new String(Base64.getDecoder().decode(key));
     }
 
 }

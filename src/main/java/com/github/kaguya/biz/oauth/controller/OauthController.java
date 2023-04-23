@@ -86,12 +86,14 @@ public class OauthController {
 
         AuthRequest authRequest = factory.get(getAuthSource(oauthType.toUpperCase()));
         // 可能会出现连接超时
-        AuthResponse authResponse = null;
+        AuthResponse authResponse;
         try {
             authResponse = authRequest.login(callback);
             log.info("[response] = {}", JSONUtil.toJsonStr(response));
         }catch (Exception e){
             log.error("调用第三方验证失败", e);
+            modelAndView.setViewName("/login");
+            return modelAndView;
         }
 
         // 获取第三方返回登录成功的信息
@@ -116,7 +118,7 @@ public class OauthController {
         thirdOAuthService.add(sessionUser);
         // session cookie
         String cookieValue = loginContainer.setSessionCookieValue(OAuthType.THIRD_TYPE, userId, token);
-        loginContainer.setSessionCookie(request, response, cookieValue, 0);
+        loginContainer.setSessionCookie(response, cookieValue, 0);
         loginContainer.setSession(request, sessionUser);
         modelAndView.setViewName("/index");
         return modelAndView;
@@ -172,7 +174,7 @@ public class OauthController {
 
         // session cookie
         String cookieValue = loginContainer.setSessionCookieValue(auth);
-        loginContainer.setSessionCookie(request, response, cookieValue, 0);
+        loginContainer.setSessionCookie(response, cookieValue, 0);
         loginContainer.setSession(request, localUser);
         modelAndView.setViewName("/index");
         return modelAndView;

@@ -44,7 +44,7 @@ public class LoginContainer {
     @Resource
     private ThirdOAuthMapper thirdOAuthMapper;
 
-    public HttpServletRequest getRequest(){
+    public HttpServletRequest getRequest() throws NullPointerException{
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         return requestAttributes.getRequest();
     }
@@ -55,10 +55,7 @@ public class LoginContainer {
      * @return true 是， false 否
      */
     public boolean isLogin() {
-        if (null == getUserTypeAndId(getRequest())) {
-            return false;
-        }
-        return true;
+        return null != getUserTypeAndId(getRequest());
     }
 
     /**
@@ -138,7 +135,7 @@ public class LoginContainer {
      * @param value  cookie值
      * @param expiry 过期时间，单位秒。0表示使用默认
      */
-    public void setSessionCookie(HttpServletRequest request, HttpServletResponse response, String value, int expiry) {
+    public void setSessionCookie(HttpServletResponse response, String value, int expiry) {
         log.info("set session cookie:{}", value);
         if (0 == expiry) {
             expiry = COOKIE_EXPIRE_IN_SECONDS;

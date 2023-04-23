@@ -16,7 +16,7 @@ import java.util.Objects;
 public class DocumentServiceImpl implements DocumentService, IDocumentKey {
 
 
-    private final static long EXPIRE = 3600 * 24L;
+    private static final long EXPIRE = 3600 * 24L;
 
     @Resource
     private RedisClient redisClient;

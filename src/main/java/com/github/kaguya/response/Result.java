@@ -8,18 +8,18 @@ import java.util.List;
  * 统一响应
  */
 @Data
-public class Result implements Serializable {
+public class Result<T> implements Serializable {
 
     private static final Long serialVersionUID = 1L;
-    private static final String SUCCESS_RESULT = "1";
-    private static final String FAIL_RESULT = "0";
+    private static final String SUCCESS_CODE = "1";
+    private static final String FAIL_CODE = "0";
     private static final String SUCCESS_MSG = "success";
     private static final String FAIL_MSG = "fail";
 
     /**
      * 结果
      */
-    private String result;
+    private String code;
     /**
      * 描述
      */
@@ -31,15 +31,15 @@ public class Result implements Serializable {
     /**
      * 返回的数据结果集
      */
-    private Object data;
+    private T data;
 
     public void setDefaultSuccessResult() {
-        setResult(SUCCESS_RESULT);
+        setCode(SUCCESS_CODE);
         setMsg(SUCCESS_MSG);
     }
 
     public void setDefaultFailResult() {
-        setResult(FAIL_RESULT);
+        setCode(FAIL_CODE);
         setMsg(FAIL_MSG);
     }
 
@@ -64,7 +64,7 @@ public class Result implements Serializable {
 
     public static Result fail(String msg) {
         Result response = new Result();
-        response.setResult(FAIL_RESULT);
+        response.setCode(FAIL_CODE);
         response.setMsg(msg);
         return response;
     }

@@ -14,8 +14,7 @@ import java.util.List;
 @Service
 public class CategoryServiceImpl implements CategoryService, ICategoryKey {
 
-
-    private final static long EXPIRE = 3600 * 24L;
+    private static final long EXPIRE = 3600 * 24L;
 
     @Resource
     private RedisClient redisClient;

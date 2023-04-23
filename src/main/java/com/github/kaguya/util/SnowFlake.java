@@ -20,19 +20,19 @@ public class SnowFlake {
     /**
      * 开始时间戳，毫秒级别 2019-12-09 09:52:39 000
      */
-    private final static long START_TIME_STAMP = 1575856359000L;
+    private static final long START_TIME_STAMP = 1575856359000L;
     /**
      * 序列号占用的位数
      */
-    private final static long SEQUENCE_BIT = 12L;
+    private static final long SEQUENCE_BIT = 12L;
     /**
      * 机器标识占用的位数
      */
-    private final static long MACHINE_BIT = 8L;
+    private static final long MACHINE_BIT = 8L;
     /**
      * 数据中心占用的位数
      */
-    private final static long DATA_CENTER_BIT = 4L;
+    private static final long DATA_CENTER_BIT = 4L;
 
     /**
      * -1L ^ (-1L << n)表示占n个bit的数字的最大值是多少。
@@ -41,28 +41,28 @@ public class SnowFlake {
     /**
      * 生成序列的掩码(0b111111111111=0xfff=4095)
      */
-    private final static long MAX_SEQUENCE = -1L ^ (-1L << SEQUENCE_BIT);
+    private static final long MAX_SEQUENCE = -1L ^ (-1L << SEQUENCE_BIT);
     /**
      * 支持的最大机器标识ID 255
      */
-    private final static long MAX_MACHINE_NUM = -1L ^ (-1L << MACHINE_BIT);
+    private static final long MAX_MACHINE_NUM = -1L ^ (-1L << MACHINE_BIT);
     /**
      * 支持的最大数据中心ID 15
      */
-    private final static long MAX_DATACENTER_NUM = -1L ^ (-1L << DATA_CENTER_BIT);
+    private static final long MAX_DATACENTER_NUM = -1L ^ (-1L << DATA_CENTER_BIT);
 
     /**
      * 机器ID向左移12位
      */
-    private final static long MACHINE_LEFT = SEQUENCE_BIT;
+    private static final long MACHINE_LEFT = SEQUENCE_BIT;
     /**
      * 数据中心ID向左移20位(12+8)
      */
-    private final static long DATACENTER_LEFT = SEQUENCE_BIT + MACHINE_BIT;
+    private static final long DATACENTER_LEFT = SEQUENCE_BIT + MACHINE_BIT;
     /**
      * 时间戳向左移24位(12+8+4)
      */
-    private final static long TIMESTAMP_LEFT = DATACENTER_LEFT + DATA_CENTER_BIT;
+    private static final long TIMESTAMP_LEFT = DATACENTER_LEFT + DATA_CENTER_BIT;
 
     /**
      * 机器标识ID
@@ -95,8 +95,7 @@ public class SnowFlake {
     }
 
     public static Long generateId() {
-        long id = snowFlake.nextId();
-        return id;
+        return snowFlake.nextId();
     }
 
     /**
@@ -155,11 +154,4 @@ public class SnowFlake {
         return System.currentTimeMillis();
     }
 
-    // public static void main(String[] args) throws Exception {
-    //     long start = System.currentTimeMillis();
-    //     for (int i = 0; i < 20191209; i++) {
-    //         System.out.println(SnowFlake.generateId());
-    //     }
-    //     System.out.println(System.currentTimeMillis() - start);
-    // }
 }

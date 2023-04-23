@@ -28,7 +28,7 @@ import java.util.Objects;
 @Slf4j
 public class DocumentGroupServiceImpl implements DocumentGroupService, IDocumentKey {
 
-    private final static long EXPIRE = 3600 * 24L;
+    private static final long EXPIRE = 3600 * 24L;
 
     @Resource
     private SystemProperty systemProperty;
@@ -50,7 +50,7 @@ public class DocumentGroupServiceImpl implements DocumentGroupService, IDocument
                 return null;
             }
             // 遍历树形文档
-            root = genDocsGroup(root);
+            genDocsGroup(root);
             DocumentTreeDTO documentGroups = new DocumentTreeDTO();
             documentGroups.setGroups(root);
             redisClient.set(key, documentGroups, EXPIRE);

@@ -38,5 +38,5 @@ public class DocumentGroup implements Serializable {
      * 子类
      */
     @Transient
-    List<DocumentGroup> children = null;
+    private List<DocumentGroup> children = null;
 }

@@ -46,5 +46,5 @@ public class DocumentGroupDTO implements Serializable {
      * 子类
      */
     @Transient
-    List<DocumentGroupDTO> children = null;
+    private List<DocumentGroupDTO> children = null;
 }

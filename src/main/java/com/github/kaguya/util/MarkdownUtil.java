@@ -10,6 +10,9 @@ import com.vladsch.flexmark.util.data.MutableDataSet;
  */
 public class MarkdownUtil {
 
+    private MarkdownUtil() {
+    }
+
     public static String markdownToHtml(String markdown){
         MutableDataSet options = new MutableDataSet();
         Parser parser = Parser.builder(options).build();

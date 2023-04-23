@@ -13,6 +13,9 @@ import java.text.MessageFormat;
  */
 public class JsonUtils {
 
+    private JsonUtils() {
+    }
+
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss:SSS";
 
     /**
@@ -31,8 +34,7 @@ public class JsonUtils {
      */
     public static Gson gsonBuilder() {
         GsonBuilder builder = new GsonBuilder().serializeNulls().setDateFormat(DATE_FORMAT);
-        Gson gson = builder.create();
-        return gson;
+        return builder.create();
     }
 
     /**
