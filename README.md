@@ -38,13 +38,13 @@
 * JDK1.8
 
 #### 配置
-在`application.yml`文件中修改MySQL和Redis配置, 运行sql目录下的`kaguya.sql`或`kaguya-data-structure.sql`;
+在`application.yml`文件中修改MySQL和Redis配置, 运行sql目录下的`kaguya.sql`或`kaguya-data-structure.sql`
  
 #### 初始化
-运行`com.github.kaguya.KaguyaApplicationTests.user`初始化用户;
+运行`com.github.kaguya.KaguyaApplicationTests.user`初始化用户
  
 #### 访问
-访问[localhost:9420](localhost:9420);
+访问[http://localhost:9420](http://localhost:9420)
  
 ### License
 [BSD 3-Clause](./LICENSE)
