@@ -1,7 +1,7 @@
 package com.github.kaguya.config;
 
-import com.github.kaguya.exception.BusinessException;
-import com.github.kaguya.response.Result;
+import com.github.kaguya.base.exception.BusinessException;
+import com.github.kaguya.base.response.Result;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;

@@ -1,4 +1,4 @@
-package com.github.kaguya.redis.client;
+package com.github.kaguya.config.redis.client;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;

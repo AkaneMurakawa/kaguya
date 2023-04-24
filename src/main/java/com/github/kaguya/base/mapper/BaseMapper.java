@@ -1,4 +1,4 @@
-package com.github.kaguya.mapper;
+package com.github.kaguya.base.mapper;
 
 import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.common.MySqlMapper;

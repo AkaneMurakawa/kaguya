@@ -4,7 +4,7 @@ import com.github.kaguya.biz.document.mapper.DocumentMapper;
 import com.github.kaguya.biz.document.model.entity.Document;
 import com.github.kaguya.biz.document.service.DocumentService;
 import com.github.kaguya.biz.document.service.IDocumentKey;
-import com.github.kaguya.redis.client.RedisClient;
+import com.github.kaguya.config.redis.client.RedisClient;
 import com.github.kaguya.util.JsonUtils;
 import com.github.kaguya.util.MarkdownUtil;
 import org.apache.commons.lang3.StringUtils;

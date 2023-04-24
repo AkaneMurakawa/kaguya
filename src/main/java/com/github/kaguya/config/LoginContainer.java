@@ -8,7 +8,7 @@ import com.github.kaguya.biz.oauth.model.entity.LocalUser;
 import com.github.kaguya.biz.oauth.model.entity.OAuth;
 import com.github.kaguya.biz.oauth.model.entity.ThirdOAuth;
 import com.github.kaguya.constant.RedisKeyPrefix;
-import com.github.kaguya.redis.client.RedisClient;
+import com.github.kaguya.config.redis.client.RedisClient;
 import com.github.kaguya.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

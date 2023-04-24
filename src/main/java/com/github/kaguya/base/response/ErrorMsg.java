@@ -1,4 +1,4 @@
-package com.github.kaguya.response;
+package com.github.kaguya.base.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

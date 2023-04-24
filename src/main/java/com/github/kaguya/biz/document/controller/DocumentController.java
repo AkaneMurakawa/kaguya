@@ -1,7 +1,7 @@
 package com.github.kaguya.biz.document.controller;
 
 import com.github.kaguya.annotation.LoginPermission;
-import com.github.kaguya.response.Result;
+import com.github.kaguya.base.response.Result;
 import com.github.kaguya.biz.document.model.entity.Document;
 import com.github.kaguya.biz.document.model.dto.DocumentTreeDTO;
 import com.github.kaguya.biz.document.model.dto.DocumentDTO;

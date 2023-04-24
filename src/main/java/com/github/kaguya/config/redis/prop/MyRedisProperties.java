@@ -1,4 +1,4 @@
-package com.github.kaguya.redis.prop;
+package com.github.kaguya.config.redis.prop;
 
 import lombok.Getter;
 import lombok.Setter;

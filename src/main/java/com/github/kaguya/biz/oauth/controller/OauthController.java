@@ -5,7 +5,7 @@ import cn.hutool.json.JSONUtil;
 import com.github.kaguya.config.LoginContainer;
 import com.github.kaguya.prop.SystemProperty;
 import com.github.kaguya.constant.OAuthType;
-import com.github.kaguya.response.Result;
+import com.github.kaguya.base.response.Result;
 import com.github.kaguya.biz.oauth.model.entity.LocalOAuth;
 import com.github.kaguya.biz.oauth.model.entity.LocalUser;
 import com.github.kaguya.biz.oauth.model.entity.ThirdOAuth;

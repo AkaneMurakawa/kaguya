@@ -1,6 +1,6 @@
 package com.github.kaguya.biz.category.controller;
 
-import com.github.kaguya.response.Result;
+import com.github.kaguya.base.response.Result;
 import com.github.kaguya.biz.category.service.CategoryService;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;

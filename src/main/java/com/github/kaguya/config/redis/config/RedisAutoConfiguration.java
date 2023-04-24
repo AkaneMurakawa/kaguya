@@ -1,9 +1,9 @@
-package com.github.kaguya.redis.config;
+package com.github.kaguya.config.redis.config;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.kaguya.redis.prop.MyRedisProperties;
+import com.github.kaguya.config.redis.prop.MyRedisProperties;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

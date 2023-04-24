@@ -1,4 +1,4 @@
-package com.github.kaguya.exception;
+package com.github.kaguya.base.exception;
 
 public class BusinessException extends RuntimeException {
 

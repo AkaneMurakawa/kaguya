@@ -2,7 +2,7 @@ package com.github.kaguya.biz.category.service.impl;
 
 import com.github.kaguya.biz.category.mapper.CategoryMapper;
 import com.github.kaguya.biz.category.service.ICategoryKey;
-import com.github.kaguya.redis.client.RedisClient;
+import com.github.kaguya.config.redis.client.RedisClient;
 import com.github.kaguya.biz.category.model.entity.Category;
 import com.github.kaguya.biz.category.service.CategoryService;
 import com.github.kaguya.util.SnowFlake;
